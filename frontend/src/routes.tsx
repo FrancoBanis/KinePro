@@ -18,6 +18,7 @@ import HistorialPagos from './pages/HistorialPagos'
 import HistorialPagosClinica from './pages/HistorialPagosClinica'
 import { ConfirmarColaTurno } from './pages/ConfirmarColaTurno'
 import { ConfirmarColaRutina } from './pages/ConfirmarColaRutina'
+import { ROUTES } from './constants/config'
 
 function RegisterRoute() {
   const location = useLocation() as { state?: { email?: string } }
@@ -27,23 +28,23 @@ function RegisterRoute() {
 export default function  AppRoutes() {
   return (
     <Routes>
-      <Route path='/' element={<HomePage />} />
-      <Route path='/register' element={<RegisterRoute />} />
-      <Route path='/login' element={<LoginPage />} />
-      <Route path='/UserPanel' element={<EditarDatosPage />} />
-      <Route path='/mis-turnos' element={<MisTurnosPage />} />
-      <Route path='/validarToken' element={<ValidarToken />} />
-      <Route path='/rutinas' element={<RutinasPage />} />
-      <Route path='/turnos' element={<TurnosPage />} />
-      <Route path='/actividades' element={<ActividadesPage />} />
-      <Route path ='tipos-rutina' element={<TipoRutinasPage/>}/>
-      <Route path="/pago-exitoso" element={<PagoExitoso />} />
-      <Route path="/pago-fallido" element={<PagoFallido />} />
-      <Route path="/administrar-usuarios" element={<AdministrarUsuarios />} />
-      <Route path="/historial-turnos" element={<HistorialTurnosPage />} />
-      <Route path="/ver-empleados" element={<VerEmpleados />} />
-      <Route path="/historial-pagos" element={<HistorialPagos />} />
-      <Route path="/historial-pagos-clinica" element={<HistorialPagosClinica />} />
+      <Route path={ROUTES.HOME} element={<HomePage />} />
+      <Route path={ROUTES.REGISTRO} element={<RegisterRoute />} />
+      <Route path={ROUTES.INICIAR_SESION} element={<LoginPage />} />
+      <Route path={ROUTES.PANEL_USUARIO} element={<EditarDatosPage />} />
+      <Route path={ROUTES.MIS_TURNOS} element={<MisTurnosPage />} />
+      <Route path={ROUTES.VALIDAR_TOKEN} element={<ValidarToken />} />
+      <Route path={ROUTES.RUTINAS} element={<RutinasPage />} />
+      <Route path={ROUTES.TURNOS} element={<TurnosPage />} />
+      <Route path={ROUTES.ACTIVIDADES} element={<ActividadesPage />} />
+      <Route path ={ROUTES.TIPOS_RUTINA} element={<TipoRutinasPage/>}/>
+      <Route path={ROUTES.PAGO_EXITOSO} element={<PagoExitoso />} />
+      <Route path={ROUTES.PAGO_FALLIDO} element={<PagoFallido />} />
+      <Route path={ROUTES.ADMINISTRAR_USUARIOS} element={<AdministrarUsuarios />} />
+      <Route path={ROUTES.HISTORIAL_TURNOS} element={<HistorialTurnosPage />} />
+      <Route path={ROUTES.VER_EMPLEADOS} element={<VerEmpleados />} />
+      <Route path={ROUTES.HISTORIAL_PAGOS} element={<HistorialPagos />} />
+      <Route path={ROUTES.HISTORIAL_PAGOS_CLINICA} element={<HistorialPagosClinica />} />
       <Route path="/ConfirmarColaTurno/:turnoId/:usuarioId" element={<ConfirmarColaTurno />} />
       <Route path="/ConfirmarColaRutina/:rutinaId/:usuarioId" element={<ConfirmarColaRutina />} />
     </Routes>

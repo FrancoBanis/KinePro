@@ -3,6 +3,7 @@ import './Header.css'
 import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 import { formatUserRole } from '../utils/roles'
+import { ROUTES } from '../constants/config'
 
 export function Header() {
     const navigate = useNavigate();
@@ -52,7 +53,7 @@ export function Header() {
             </nav>
             <div className='auth-container'>
                 {!user && (
-                    <button className='btn-log' onClick={() => navigate('/login')}>Iniciar sesion</button>
+                    <button className='btn-log' onClick={() => navigate(ROUTES.INICIAR_SESION)}>Iniciar sesion</button>
                 )}
                 {user && user.rol === 'ROLE_ADMIN' && (
                     <button type="button" className="btn-gray" onClick={() => navigate('/historial-turnos')}>
