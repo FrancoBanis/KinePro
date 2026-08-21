@@ -17,21 +17,21 @@ export function Header() {
         ? [user.nombre, user.apellido].filter(Boolean).join(' ') || user.email || 'Usuario'
         : 'Usuario';
     const navItems = [
-        { to: '/rutinas', label: 'Ver rutinas' },
-        { to: '/turnos', label: 'Ver turnos' },
+        { to: ROUTES.RUTINAS, label: 'Ver rutinas' },
+        { to: ROUTES.TURNOS, label: 'Ver turnos' },
     ];
     const isProfessional =
         user?.rol?.toString() === 'ROLE_PROFESIONALES' ||
         user?.rol?.toString() === '2';
 
     if (isProfessional) {
-        navItems.push({ to: '/actividades', label: 'Ver mis actividades' });
+        navItems.push({ to: ROUTES.ACTIVIDADES, label: 'Ver mis actividades' });
     }
 
     const handleLogout = () => {
         logout();
         setMenuOpen(false);
-        navigate('/');
+        navigate(ROUTES.HOME);
     }
 
     return (
@@ -56,7 +56,7 @@ export function Header() {
                     <button className='btn-log' onClick={() => navigate(ROUTES.INICIAR_SESION)}>Iniciar sesion</button>
                 )}
                 {user && user.rol === 'ROLE_ADMIN' && (
-                    <button type="button" className="btn-gray" onClick={() => navigate('/historial-turnos')}>
+                    <button type="button" className="btn-gray" onClick={() => navigate(ROUTES.HISTORIAL_TURNOS)}>
                         Historial de turnos
                     </button>
                 )}
@@ -79,26 +79,26 @@ export function Header() {
                                 </div>
                                 {isAdmin && (
                                     <>
-                                        <button className="dropdown-item" type="button" onClick={() => navigate('/administrar-usuarios')}>
+                                        <button className="dropdown-item" type="button" onClick={() => navigate(ROUTES.ADMINISTRAR_USUARIOS)}>
                                             Administrar usuarios
                                         </button>
-                                        <button className="dropdown-item" type="button" onClick={() => navigate('/ver-empleados')}>
+                                        <button className="dropdown-item" type="button" onClick={() => navigate(ROUTES.VER_EMPLEADOS)}>
                                             Ver empleados
                                         </button>
                                     </>
                                 )}
                                 {canViewClinicPayments && (
-                                    <button className="dropdown-item" type="button" onClick={() => navigate('/historial-pagos-clinica')}>
+                                    <button className="dropdown-item" type="button" onClick={() => navigate(ROUTES.HISTORIAL_PAGOS_CLINICA)}>
                                         Ver pagos de la clinica
                                     </button>
                                 )}
-                                <button className="dropdown-item" type="button" onClick={() => navigate('/historial-pagos')}>
+                                <button className="dropdown-item" type="button" onClick={() => navigate(ROUTES.HISTORIAL_PAGOS)}>
                                     Ver historial de pagos
                                 </button>
-                                <button className="dropdown-item" type="button" onClick={() => navigate('/mis-turnos')}>
+                                <button className="dropdown-item" type="button" onClick={() => navigate(ROUTES.MIS_TURNOS)}>
                                     Ver mis turnos
                                 </button>
-                                <button className="dropdown-item" type="button" onClick={() => navigate('/UserPanel')}>
+                                <button className="dropdown-item" type="button" onClick={() => navigate(ROUTES.PANEL_USUARIO)}>
                                     Editar mis datos
                                 </button>
                                 <button className="dropdown-item" type="button" onClick={handleLogout}>

@@ -124,7 +124,7 @@ function AdministrarUsuarios() {
         nombre: editForm.nombre,
         apellido: editForm.apellido,
         dni: Number(editForm.dni),
-        fechaNacimiento: editForm.fechaNacimiento,
+        fechaNacimiento: editForm.fechaNacimiento as string,
         email: selectedUser?.email,
         rol: editForm.rol,
       })

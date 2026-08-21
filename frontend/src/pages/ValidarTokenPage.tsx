@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLocationState } from "../constants/useLocationState";
+import { ROUTES } from "../constants/config";
 
 function ValidarToken() {
   const location = useLocation();
@@ -37,7 +38,7 @@ function ValidarToken() {
       );
 
       if (res.data.registered === false) {
-        navigate("/register", {
+        navigate(ROUTES.REGISTRO, {
           state: {
             email,
             ...location.state,
