@@ -1,24 +1,25 @@
 import axios from "axios";
 import type { reembolsoDTO } from "../constants/reembolso";
 import type { ProfesionalData } from "../constants/shift";
+import { ENDPOINTS_TURNO } from "../constants/config";
 
 const BASE_URL = "http://localhost:8080";
 
 export async function getProfesionales(): Promise<ProfesionalData[]> {
-    const response = await fetch(`${BASE_URL}/api/auth/users/profesionales`, {
+    const response = await fetch(ENDPOINTS_TURNO.PROFESIONALES, {
         credentials: "include",
     });
     if (!response.ok) throw new Error("Error al obtener profesionales");
     return response.json();
 }
 export async function getCostoTurno(turnoId : number): Promise<number>{
-    const response = await axios.get(`${BASE_URL}/turnos/pago`, {params: {id: turnoId}});
+    const response = await axios.get(ENDPOINTS_TURNO.COSTO_TURNO, {params: {id: turnoId}});
     if (!response.status) throw new Error("Error al calcular el costo");
     return response.data;
     }
 
 export async function getAllTurnos() {
-    const response = await fetch(`${BASE_URL}/turnos/todos`, {
+    const response = await fetch(ENDPOINTS_TURNO.TODOS_LOS_TURNOS, {
         credentials: "include",
     });
     if (!response.ok) throw new Error("Error al obtener todos los turnos");
@@ -33,21 +34,21 @@ export async function getTurnos() {
     return response.json();
 }
 export async function getMisTurnos(usuarioId: number) {
-  const response = await axios.get(`${BASE_URL}/turnos/mis-turnos`, {
+  const response = await axios.get( ENDPOINTS_TURNO.MIS_TURNOS, {
     params: { usuarioId },
     withCredentials: true,
   });
   return response.data;
 }
 export async function getMisTurnosProfesional(usuarioId: number) {
-  const response = await axios.get(`${BASE_URL}/turnos/mis-turnos-profesional`, {
+  const response = await axios.get( ENDPOINTS_TURNO.TURNOS_DE_PROFESIONAL, {
     params: { usuarioId },
     withCredentials: true,
   });
   return response.data;
 }
 export async function getTurnosSimilares(turnoId: number, usuarioId: number ){
-    const response = await axios.get(`${BASE_URL}/turnos/turnos-similares`, {
+    const response = await axios.get(ENDPOINTS_TURNO.TURNOS_SIMILARES, {
         params: {turnoId: turnoId, usuarioId: usuarioId},
         withCredentials: true,
     });
@@ -55,17 +56,17 @@ export async function getTurnosSimilares(turnoId: number, usuarioId: number ){
     return response.data;
 }
 export async function getRutina(rutinaId: number) {
-    const response = await fetch(`${BASE_URL}/rutinas/${rutinaId}`);
+    const response = await fetch(ENDPOINTS_TURNO.RUTINA(rutinaId));
     if (!response.ok) throw new Error("Error al obtener la rutina");
     return response.json();
 }
 export async function estaInscriptoEnTurno (usuarioId: number, turnoId: number) : Promise<boolean> {
-    const response = await fetch(`${BASE_URL}/turnos/${turnoId}/pacientes/${usuarioId}`);
+    const response = await fetch(ENDPOINTS_TURNO.VERIFICAR_SI_INSCRIPTO(usuarioId,turnoId));
     if (!response.ok) throw new Error("Error al verificar inscripcion");
     return response.json();
 }
 export async function calcularReembolso (usuarioId : number , turnoId: number) : Promise<reembolsoDTO> {
-  const response = await axios.get(`${BASE_URL}/turnos/calcular-reembolso`, {
+  const response = await axios.get(ENDPOINTS_TURNO.CALCULAR_REEMBOLSO, {
     params: {turnoId: turnoId, usuarioId: usuarioId},
     withCredentials: true,
     })
@@ -73,7 +74,7 @@ export async function calcularReembolso (usuarioId : number , turnoId: number) :
     return response.data;
 } 
 export async function cancelarTurno (usuarioId: number, turnoId: number) : Promise<void> {
-    const response = await fetch(`${BASE_URL}/turnos/${turnoId}/pacientes/${usuarioId}`, {
+    const response = await fetch(ENDPOINTS_TURNO.CANCELAR(usuarioId,turnoId), {
         method: "DELETE",
         credentials: "include",
     });
@@ -82,7 +83,7 @@ export async function cancelarTurno (usuarioId: number, turnoId: number) : Promi
     return;
 }
 export async function reprogramarTurno(usuarioId:number, turnoActId: number, turnoNueId: number) {
-    const response = await axios.get(`${BASE_URL}/turnos/reprogramar`, {
+    const response = await axios.get(ENDPOINTS_TURNO.REPROGRAMAR, {
         params: {usuarioId: usuarioId, turnoActId: turnoActId, turnoNueId: turnoNueId},
         withCredentials: true,
     });
@@ -91,7 +92,7 @@ export async function reprogramarTurno(usuarioId:number, turnoActId: number, tur
     return;
 }
 export async function agregarAColaEspera(turnoId: number, usuarioId: number): Promise<void> {
-  const response = await fetch(`${BASE_URL}/api/cola-espera/${turnoId}/usuario/${usuarioId}`, {
+  const response = await fetch(ENDPOINTS_TURNO.AGREGAR_A_COLA(turnoId,usuarioId), {
     method: "POST",
     credentials: "include",
   });

@@ -1,10 +1,9 @@
 import axios from "axios";
 import { type RutinaFormValues } from "../components/forms/RutinaFormModal";
-
-const BASE_URL = "http://localhost:8080";
+import { ENDPOINTS_RUTINA } from "../constants/config";
 
 export async function getRutinasActivas() : Promise<any> {
-  const response = await fetch(`${BASE_URL}/rutinas/activa/true`, {
+  const response = await fetch(ENDPOINTS_RUTINA.RUTINAS_ACTIVAS, {
     credentials: "include",
   });
   if (!response.ok) {
@@ -14,7 +13,7 @@ export async function getRutinasActivas() : Promise<any> {
   return response.json();
 }
 export async function getCantidadDeMisRutinas(id: number, idUsuario: number) : Promise<number> {
-  const response = await axios.get(`${BASE_URL}/rutinas/mis-rutinas/contar`, {
+  const response = await axios.get(ENDPOINTS_RUTINA.CANTIDAD_DE_MIS_RUTINAS, {
     params: {id: id , idUsuario: idUsuario },
     withCredentials: true,
     }
@@ -22,7 +21,7 @@ export async function getCantidadDeMisRutinas(id: number, idUsuario: number) : P
   return response.data;
 }
 export async function getRutinasSimilares(id : number,  idUsuario: number ) {
- const response = await axios.get(`${BASE_URL}/rutinas/rutinas-similares` , {
+ const response = await axios.get(ENDPOINTS_RUTINA.RUTINAS_SIMILARES, {
   params: {idRutina: id, idUsuario: idUsuario},
   withCredentials: true,  
  });
@@ -30,7 +29,7 @@ export async function getRutinasSimilares(id : number,  idUsuario: number ) {
  return response.data;
 }
 export async function getCantidadDeRutinas(id: number, idUsuario: number) : Promise<number> {
-  const response = await axios.get(`${BASE_URL}/rutinas/disponibilidad`, {
+  const response = await axios.get(ENDPOINTS_RUTINA.CANTIDAD_DE_RUTINAS, {
     params: {id: id , idUsuario: idUsuario },
     withCredentials: true,
     }
@@ -38,28 +37,28 @@ export async function getCantidadDeRutinas(id: number, idUsuario: number) : Prom
   return response.data;
 }
 export async function getRutina (idRutina: number) : Promise<any> {
-  const response = await fetch(`${BASE_URL}/rutinas/${idRutina}`, {
+  const response = await fetch(ENDPOINTS_RUTINA.RUTINA(idRutina), {
         credentials: "include",
       });
       return response.json();
 }
 
 export async function getMisRutinas (idUsuario: number ) {
-  const response = await axios.get(`${BASE_URL}/rutinas/mis-rutinas`, {
+  const response = await axios.get(ENDPOINTS_RUTINA.MIS_RUTINAS, {
     params: {idUsuario},
     withCredentials: true,
   })
   return response.data;
 }
 export async function getTurnosDeMisRutinas (idUsuario : number,  idRutina: number ) {
-  const response = await axios.get(`${BASE_URL}/rutinas/mis-rutinas/turnos`, {
+  const response = await axios.get(ENDPOINTS_RUTINA.MIS_TURNOS, {
     params: {idUsuario: idUsuario, idRutina: idRutina},
     withCredentials: true,
   })
   return response.data;
 }
 export async function handleCrearRutina(payload : RutinaFormValues){
-  const response = await fetch(`${BASE_URL}/rutinas/admin`, {
+  const response = await fetch(ENDPOINTS_RUTINA.CREAR_RUTINA, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -75,7 +74,7 @@ export async function handleCrearRutina(payload : RutinaFormValues){
     return response;
 } 
     export async function handleModificarRutina(idRutinaEnEdicion: number, payload: RutinaFormValues) {
-      const response = await fetch(`${BASE_URL}/rutinas/admin/${idRutinaEnEdicion}`, {
+      const response = await fetch(ENDPOINTS_RUTINA.MODIFICAR_RUTINA(idRutinaEnEdicion), {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -89,7 +88,7 @@ export async function handleCrearRutina(payload : RutinaFormValues){
     }
 export async function reprogramarRutina(idUsuario: number, idRutinaActual: number, idRutinaNueva: number): Promise<any> {
   const response = await axios.post(
-    `http://localhost:8080/rutinas/${idRutinaActual}/reprogramar/${idRutinaNueva}/usuarios/${idUsuario}`,
+    ENDPOINTS_RUTINA.REPROGRAMAR_RUTINA(idUsuario,idRutinaActual,idRutinaNueva),
     {}, // Body vacío
     {
       withCredentials: true 
@@ -99,7 +98,7 @@ export async function reprogramarRutina(idUsuario: number, idRutinaActual: numbe
   return response.data;
 }
 export async function handleDesactivarRutina(rutinaId: number): Promise<void> {
-    const response = await fetch(`${BASE_URL}/rutinas/admin/${rutinaId}/desactivar`, {
+    const response = await fetch(ENDPOINTS_RUTINA.DESACTIVAR_RUTINA(rutinaId), {
       method: "PATCH",
       credentials: "include",
     });
@@ -115,7 +114,7 @@ export async function handleDesactivarRutina(rutinaId: number): Promise<void> {
 export async function handleEnviarAviso(idRutina: number , mensaje: String): Promise<void> {
         try { 
           const response = await fetch( 
-            `${BASE_URL}/rutinas/admin/${idRutina}/enviar-aviso`,
+            ENDPOINTS_RUTINA.ENVIAR_AVISO(idRutina),
             {
               method : "POST",
               credentials : "include",
@@ -130,20 +129,20 @@ export async function handleEnviarAviso(idRutina: number , mensaje: String): Pro
           } 
 }
 export async function handleCalcularCosto (idRutina: number, idUsuario: number) : Promise<number> {
-        const response = await axios.get(`${BASE_URL}/rutinas/pago/calcular`, {
+        const response = await axios.get(ENDPOINTS_RUTINA.CALCULAR_COSTO, {
         params: {id: idRutina , idUsuario: idUsuario},
         withCredentials: true,
       });
       return response.data;
 }
 export async function handleVerificarInscripcion (idRutina: number, idUsuario: number) : Promise<boolean> {
-    const response = await fetch(`${BASE_URL}/rutinas/${idRutina}/usuarios/${idUsuario}`, {
+    const response = await fetch(ENDPOINTS_RUTINA.VERIFICAR_INSCRIPCION(idRutina,idUsuario), {
       credentials: "include",
     }).then(res => res.json())
     return response;
 }
 export async function handleCancelarRutina (idRutina: number, idUsuario: number) : Promise<void> {
-  await fetch(`${BASE_URL}/rutinas/${idRutina}/usuarios/${idUsuario}` , {
+  await fetch(ENDPOINTS_RUTINA.CANCELAR_RUTNA(idRutina,idUsuario), {
         method: "DELETE",
         credentials: "include",
       });
@@ -153,7 +152,7 @@ export async function handleCancelarRutina (idRutina: number, idUsuario: number)
 }
 
 export async function agregarAColaEspera(rutinaId: number, usuarioId: number): Promise<void> {
-  const response = await fetch(`${BASE_URL}/cola-espera/${rutinaId}/usuario/${usuarioId}`, {
+  const response = await fetch(ENDPOINTS_RUTINA.AGREGAR_COLA_ESPERA(rutinaId,usuarioId), {
     method: "POST",
     credentials: "include",
   });

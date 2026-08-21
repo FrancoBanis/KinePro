@@ -1,13 +1,12 @@
 import axios from "axios";
-
-const BASE_URL = "http://localhost:8080";
+import { ENDPOINTS_COLA_RUTINA } from "../constants/config";
 
 /**
  * Registra la respuesta del usuario (aceptar/rechazar) cuando se libera una vacante en la rutina.
  */
 export async function recibirRespuestaColaRutina(rutinaId: number, usuarioId: number, respuesta: boolean): Promise<void> {
   const response = await axios.post(
-    `${BASE_URL}/api/cola-espera-rutina/${rutinaId}/usuario/${usuarioId}/recibir-respuesta`, 
+    ENDPOINTS_COLA_RUTINA.RECIBIR_RESPUESTA_COLA_RUTINA(rutinaId,usuarioId), 
     null, 
     {
       params: { respuesta } // Axios mapea esto automáticamente como Query Param
@@ -25,7 +24,7 @@ export async function recibirRespuestaColaRutina(rutinaId: number, usuarioId: nu
  */
 export async function enviarAvisoRutina(rutinaId: number, usuarioId: number): Promise<void> {
   const response = await axios.post(
-    `${BASE_URL}/api/cola-espera-rutina/${rutinaId}/usuario/${usuarioId}/enviar-aviso`, 
+    ENDPOINTS_COLA_RUTINA.ENVIAR_AVISO_RUTINA(rutinaId,usuarioId), 
     {}, 
     { withCredentials: true }
   );
@@ -41,7 +40,7 @@ export async function enviarAvisoRutina(rutinaId: number, usuarioId: number): Pr
  */
 export async function agregarAColaRutina(rutinaId: number, usuarioId: number): Promise<any> {
   const response = await axios.post(
-    `${BASE_URL}/api/cola-espera-rutina/${rutinaId}/usuario/${usuarioId}`, 
+    ENDPOINTS_COLA_RUTINA.AGREGAR_COLA_RUTINA(rutinaId,usuarioId), 
     {}, 
     { withCredentials: true }
   );
@@ -58,7 +57,7 @@ export async function agregarAColaRutina(rutinaId: number, usuarioId: number): P
  */
 export async function estaEnColaRutina(rutinaId: number, usuarioId: number): Promise<boolean> {
   const response = await axios.get(
-    `${BASE_URL}/api/cola-espera-rutina/${rutinaId}/usuario/${usuarioId}`, 
+    ENDPOINTS_COLA_RUTINA.ESTA_EN_COLA_RUTINA(rutinaId,usuarioId), 
     { withCredentials: true }
   );
   return response.data;

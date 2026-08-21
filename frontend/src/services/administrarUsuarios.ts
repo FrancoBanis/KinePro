@@ -1,6 +1,6 @@
 import axios from "axios";
+import { ENDPOINTS_ADMINISTRAR_USUARIOS } from "../constants/config";
 
-const BASE_URL = "http://localhost:8080";
 
 export interface UsuarioData {
   id: number;
@@ -38,7 +38,7 @@ const extraerMensajeError = (err: unknown, fallback: string) => {
 
 export async function buscarUsuarios(query: string): Promise<UsuarioData[]> {
   try {
-    const response = await axios.get(`${BASE_URL}/api/auth/users/search?q=${query}`, {
+    const response = await axios.get(ENDPOINTS_ADMINISTRAR_USUARIOS.BUSCAR_USUARIOS(query), {
       withCredentials: true,
     });
     return response.data;
@@ -49,7 +49,7 @@ export async function buscarUsuarios(query: string): Promise<UsuarioData[]> {
 
 export async function crearUsuario(payload: CreateUserForm): Promise<void> {
   try {
-    await axios.post(`${BASE_URL}/api/auth/complete-registration`, payload, {
+    await axios.post(ENDPOINTS_ADMINISTRAR_USUARIOS.CREAR_USUARIO, payload, {
       withCredentials: true,
     });
   } catch (err) {
@@ -59,7 +59,7 @@ export async function crearUsuario(payload: CreateUserForm): Promise<void> {
 
 export async function actualizarUsuario(payload: UpdateUserPayload): Promise<void> {
   try {
-    await axios.put(`${BASE_URL}/api/auth/users`, payload, {
+    await axios.put(ENDPOINTS_ADMINISTRAR_USUARIOS.ACTUALIZAR_USUARIO, payload, {
       withCredentials: true,
     });
   } catch (err) {
@@ -69,7 +69,7 @@ export async function actualizarUsuario(payload: UpdateUserPayload): Promise<voi
 
 export async function desactivarUsuario(id: number): Promise<void> {
   try {
-    await axios.patch(`${BASE_URL}/api/auth/users/${id}/desactivar`, undefined, {
+    await axios.patch(ENDPOINTS_ADMINISTRAR_USUARIOS.DESACTIVAR_USUARIO(id), undefined, {
       withCredentials: true,
     });
   } catch (err) {
