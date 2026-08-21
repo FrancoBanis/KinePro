@@ -1,0 +1,120 @@
+.payment-history-page {
+  display: grid;
+  gap: 22px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.payment-history-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.payment-history-header h1 {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.payment-history-header p {
+  margin: 8px 0 0;
+  color: var(--color-muted);
+}
+
+.payment-history-count {
+  padding: 7px 12px;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.payment-history-status,
+.payment-history-empty {
+  margin: 0;
+  padding: 18px;
+  border-radius: 8px;
+}
+
+.payment-history-status {
+  color: var(--color-muted);
+}
+
+.payment-history-empty {
+  color: var(--color-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.payment-history-table-wrapper {
+  overflow-x: auto;
+  padding: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+}
+
+.payment-history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payment-history-table th,
+.payment-history-table td {
+  padding: 14px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.payment-history-table th {
+  color: var(--color-muted);
+  background: var(--color-surface-muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.payment-history-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.payment-history-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.payment-history-pagination span {
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.payment-history-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (max-width: 640px) {
+  .payment-history-page {
+    padding: 0 12px;
+  }
+
+  .payment-history-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .payment-history-table-wrapper {
+    padding: 12px;
+  }
+
+  .payment-history-pagination {
+    gap: 10px;
+  }
+}

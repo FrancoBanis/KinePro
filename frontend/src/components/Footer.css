@@ -1,0 +1,23 @@
+.footer-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    min-height: 86px;
+    padding: 18px 15px;
+    background-color: var(--color-surface);
+    color: var(--color-muted);
+    border-top: 1px solid var(--color-border);
+    flex-direction: column;
+}
+
+.footer-container p {
+    margin: 0;
+    color: var(--color-text);
+    font-weight: 800;
+}
+
+.footer-container small {
+    color: var(--color-muted);
+}

@@ -1,0 +1,82 @@
+/* Fondo general */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #096FAE;
+}
+
+/* Labels */
+.form-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    color: #333;
+}
+
+/* Inputs */
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+/* Focus input */
+.form-control:focus {
+    outline: none;
+    border-color: #096FAE;
+    box-shadow: 0 0 4px rgba(7, 83, 150, 0.3);
+}
+
+/* Espaciado */
+.mb-3 {
+    margin-bottom: 20px;
+}
+
+/* Botón */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #096FAE;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Hover botón */
+.btn-primary:hover {
+    background-color: #096FAE;
+}
+
+/* Error */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
