@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import TipoRutinaFormModal, { type TipoRutinaFormValues } from "../components/forms/TipoRutinaFormModal";
 import type { TipoRutinaData } from "../constants/tipoRutina";
-import type { RutinaData } from "../constants/routines";
+import type { RutinaData } from "../constants/rutina";
 import { Turno } from "../components/Turno";
 
 export function TipoRutinasPage() {

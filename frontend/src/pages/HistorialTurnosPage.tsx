@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import type { ProfesionalData, TurnoData } from "../constants/shift";
+import type { ProfesionalData, TurnoData } from "../constants/turno";
 import { getAllTurnos, getProfesionales, getRutina } from "../services/turnoService";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
 import "./RutinasYTurnos.css";

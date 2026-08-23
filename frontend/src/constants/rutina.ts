@@ -1,4 +1,4 @@
-import type { TurnoData } from "./shift";
+import type { TurnoData } from "./turno";
 import type { TipoRutinaData } from "./tipoRutina";
 
 export interface RutinaData {

@@ -1,4 +1,4 @@
-import { type RutinaData } from "../constants/routines";
+import { type RutinaData } from "../constants/rutina";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 import "./Cards.css";

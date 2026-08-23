@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { RutinaData } from "../constants/routines";
+import type { RutinaData } from "../constants/rutina";
 import { Rutina } from "../components/Rutina";
 import RutinaFormModal, { type RutinaFormValues } from "../components/forms/RutinaFormModal";
 import { useAuth } from "../context/AuthContext";

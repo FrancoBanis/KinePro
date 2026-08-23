@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import type { TurnoData } from "../constants/shift";
+import type { TurnoData } from "../constants/turno";
 import "./Cards.css";
 import { useAuth } from "../context/AuthContext";
 import { calcularReembolso, cancelarTurno, estaInscriptoEnTurno, getTurnosSimilares, reprogramarTurno, agregarAColaEspera } from "../services/turnoService";

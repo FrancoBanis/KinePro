@@ -1,6 +1,6 @@
 // frontend/src/components/Turno.tsx
 import React, { useEffect, useCallback } from "react";
-import { type TurnoData } from "../constants/shift";
+import { type TurnoData } from "../constants/turno";
 import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/MercadoPagoWallet";
 import { useAuth } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";

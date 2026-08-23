@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './HomePage.css'
 import { useAuth } from '../context/AuthContext'
 import { Turno } from '../components/Turno'
-import type { TurnoData } from '../constants/shift'
+import type { TurnoData } from '../constants/turno'
 import { getMisTurnosProfesional } from '../services/turnoService'
 
 export function ActividadesPage() {

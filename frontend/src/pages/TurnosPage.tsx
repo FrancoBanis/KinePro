@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { TurnoData } from "../constants/shift";
+import type { TurnoData } from "../constants/turno";
 import { Turno } from "../components/Turno";
 import "./RutinasYTurnos.css";
 import { getTurnos } from "../services/turnoService";

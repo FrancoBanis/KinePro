@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import type { TurnoData } from "../constants/shift";
-import type { RutinaData } from "../constants/routines";
+import type { TurnoData } from "../constants/turno";
+import type { RutinaData } from "../constants/rutina";
 import { Turno } from "../components/Turno";
 import { getMisRutinas, getTurnosDeMisRutinas } from "../services/rutinaService";
 import { Rutina } from "../components/Rutina";

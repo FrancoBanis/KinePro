@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { reembolsoDTO } from "../constants/reembolso";
-import type { ProfesionalData } from "../constants/shift";
+import type { ProfesionalData } from "../constants/turno";
 import { ENDPOINTS_TURNO } from "../constants/config";
 
 const BASE_URL = "http://localhost:8080";
