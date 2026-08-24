@@ -7,18 +7,10 @@ import { roleLabels } from '../utils/roles'
 import { obtenerLimitesFechaNacimiento } from '../utils/formateador'
 import './VerEmpleados.css'
 import { ROUTES } from '../constants/config'
+import type { UsuarioData } from '../constants/usuarioData'
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
 
-interface UsuarioData {
-  id: number
-  nombre: string
-  apellido: string
-  email: string
-  fechaNacimiento: string
-  dni: number
-  rol: string
-}
 
 function VerEmpleados() {
   const { user } = useAuth()

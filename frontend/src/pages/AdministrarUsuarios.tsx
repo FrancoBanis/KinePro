@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import type { ChangeEvent, KeyboardEvent } from 'react'
 import FormModal from '../components/FormModal'
 import { roleLabels } from '../utils/roles'
-import { buscarUsuarios, crearUsuario, actualizarUsuario, desactivarUsuario, type UsuarioData, type CreateUserForm } from '../services/administrarUsuarios'
+import { buscarUsuarios, crearUsuario, actualizarUsuario, desactivarUsuario } from '../services/administrarUsuarios'
 import { calcularEdad, obtenerLimitesFechaNacimiento } from '../utils/formateador'
 import './AdministrarUsuarios.css'
+import type { CreateUserForm, UsuarioData } from '../constants/usuarioData'
 
 const emptyForm: CreateUserForm = { email: '', nombre: '', apellido: '', fechaNacimiento: '', dni: 0 }
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
