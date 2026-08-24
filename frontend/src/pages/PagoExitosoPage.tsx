@@ -1,6 +1,8 @@
-import axios from "axios";
+
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { procesarPago } from "../services/transaccionService";
+import { BACKEND_URL, ROUTES } from "../constants/config";
 
 export function PagoExitoso() {
   const [searchParams] = useSearchParams();
@@ -9,25 +11,11 @@ export function PagoExitoso() {
   const status = searchParams.get("status");
   const paymentId = searchParams.get("payment_id");
 
-  const backendUrl = "http://localhost:8080";
-
   useEffect(() => {
-    const procesarPago = async () => {
+    const procesar = async () => {
       try {
-        if (paymentId && status === "approved") {
-          await axios.post(
-            `${backendUrl}/api/webhook/mercadopago`,
-            {
-              
-              type: "payment",
-              data: {
-                id: paymentId,
-              },
-            },
-            {
-              withCredentials: true,
-            }
-          );
+        if (paymentId && status) {
+          await procesarPago(paymentId, status);
         }
       } catch (err) {
         console.error("Error procesando pago:", err);
@@ -36,8 +24,8 @@ export function PagoExitoso() {
       }
     };
 
-    procesarPago();
-  }, [paymentId, status, backendUrl]);
+    procesar();
+  }, [paymentId, status, BACKEND_URL]);
 
   return (
     <div>
@@ -50,7 +38,7 @@ export function PagoExitoso() {
       {procesando ? (
         <p>Procesando pago y generando turno...</p>
       ) : (
-        <Link to="http://localhost:5173/mis-turnos">Ver mis turnos</Link>
+        <Link to={ROUTES.MIS_TURNOS}>Ver mis turnos</Link>
       )}
     </div>
   );

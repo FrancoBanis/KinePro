@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import { iniciarSesion } from "../services/usuarioService";
+import { ROUTES } from "../constants/config";
 
 export function LoginPage() {
   const location = useLocation();
@@ -16,13 +18,8 @@ export function LoginPage() {
     setLoading(true);
 
     try {
-      await axios.post(
-        "http://localhost:8080/api/auth/login",
-        { email },
-        { withCredentials: true }
-      );
-
-      navigate("/validarToken", {
+      iniciarSesion(email);
+      navigate(ROUTES.VALIDAR_TOKEN, {
         state: {
           ...location.state,
           email,

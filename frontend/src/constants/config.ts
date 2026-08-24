@@ -92,3 +92,12 @@ export const ENDPOINTS_TURNO = {
     AGREGAR_A_COLA: (idTurno: number, idUsuario: number) =>
         `${BACKEND_URL}/api/cola-espera/${idTurno}/usuario/${idUsuario}`,
 }
+
+export const ENDPOINTS_USUARIO = {
+    LOGIN: `${BACKEND_URL}/api/auth/login`,
+    VERIFICAR_TOKEN: `${BACKEND_URL}/api/auth/verify-token`,
+}
+export const ENDPOINTS_WEBHOOKS = {
+    PROCESAR_PAGO : `${BACKEND_URL}/api/webhook/mercadopago`,
+    CREAR_PREFERENCIA: `${BACKEND_URL}/api/pagos/crear-preferencia`,
+}

@@ -3,7 +3,6 @@ import type { reembolsoDTO } from "../constants/reembolso";
 import type { ProfesionalData } from "../constants/turno";
 import { ENDPOINTS_TURNO } from "../constants/config";
 
-const BASE_URL = "http://localhost:8080";
 
 export async function getProfesionales(): Promise<ProfesionalData[]> {
     const response = await fetch(ENDPOINTS_TURNO.PROFESIONALES, {
@@ -27,7 +26,7 @@ export async function getAllTurnos() {
 }
 
 export async function getTurnos() {
-    const response = await fetch(`${BASE_URL}/turnos`, {
+    const response = await fetch(ENDPOINTS_TURNO.TURNOS, {
         credentials: "include",
     });
     if (!response.ok) throw new Error("Error al obtener los turnos");

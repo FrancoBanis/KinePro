@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLocationState } from "../constants/useLocationState";
 import { ROUTES } from "../constants/config";
+import { verificarToken } from "../services/usuarioService";
 
 function ValidarToken() {
   const location = useLocation();
@@ -12,7 +13,7 @@ function ValidarToken() {
   const { setUser } = useAuth();
   const { typedState } = useLocationState();
 
-  const from = typedState?.from || "/";
+  const from = typedState?.from || ROUTES.HOME;
   const email = location.state?.email || "";
 
   const [token, setToken] = useState("");
@@ -26,17 +27,7 @@ function ValidarToken() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/auth/verify-token",
-        {
-          email,
-          token,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
+      const res = await verificarToken(email,token);
       if (res.data.registered === false) {
         navigate(ROUTES.REGISTRO, {
           state: {

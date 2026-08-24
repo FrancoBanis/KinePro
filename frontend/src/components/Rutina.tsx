@@ -158,7 +158,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
               loadingInscripcion={loadingInscripcion}
               onCancelar={handleCancelar}
               onAgendar={abrirPopUp}
-              onLogin={() => navigateWithState("/login",{from: location.pathname, abrirItemId: rutinaRecibida.id, tipo:"rutina"})}             
+              onLogin={() => navigateWithState("/iniciar-sesion",{from: location.pathname, abrirItemId: rutinaRecibida.id, tipo:"rutina"})}             
             />
             {accionAdicional}
           </div>
