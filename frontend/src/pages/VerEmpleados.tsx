@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { roleLabels } from '../utils/roles'
 import { obtenerLimitesFechaNacimiento } from '../utils/formateador'
 import './VerEmpleados.css'
+import { ROUTES } from '../constants/config'
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
 
@@ -67,7 +68,7 @@ function VerEmpleados() {
     if (isAdmin) void loadEmployees()
   }, [isAdmin, loadEmployees])
 
-  if (!isAdmin) return <Navigate to="/" replace />
+  if (!isAdmin) return <Navigate to={ROUTES.HOME} replace />
 
   const openEmployeeEditor = (employee: UsuarioData) => {
     setSelectedUser(employee)

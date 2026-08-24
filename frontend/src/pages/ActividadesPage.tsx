@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { Turno } from '../components/Turno'
 import type { TurnoData } from '../constants/turno'
 import { getMisTurnosProfesional } from '../services/turnoService'
+import { ROUTES } from '../constants/config'
 
 export function ActividadesPage() {
   const { user } = useAuth()
@@ -114,7 +115,7 @@ export function ActividadesPage() {
       )}
 
       <div className="mt-4">
-        <Link className="btn-log" to="/rutinas">
+        <Link className="btn-log" to={ROUTES.RUTINAS}>
           Volver a rutinas
         </Link>
       </div>

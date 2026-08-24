@@ -14,8 +14,8 @@ export function PagoExitoso() {
   useEffect(() => {
     const procesar = async () => {
       try {
-        if (paymentId && status) {
-          await procesarPago(paymentId, status);
+        if (paymentId  && status) {
+          await procesarPago(paymentId);
         }
       } catch (err) {
         console.error("Error procesando pago:", err);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { ROUTES } from "../constants/config";
 
 export function EditarDatosPage() {
     const { user, setUser, logout } = useAuth();
@@ -68,7 +69,7 @@ export function EditarDatosPage() {
                 { withCredentials: true }
             );
             logout();
-            navigate("/");
+            navigate(ROUTES.HOME);
         } catch (err) {
             console.error(err);
             setError("No se pudo desactivar la cuenta.");

@@ -3,12 +3,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { ENDPOINTS_WEBHOOKS } from "../../constants/config";
+import type { MercadoPagoProps } from "../../constants/mercadoPagoProps";
+import { crearPreferencia } from "../../services/transaccionService";
 let sdkInitialized = false;
-interface MercadoPagoProps {
-    itemId: number
-    tipo: "rutina" | "turno";
-    usuarioIdParam?: number;
-}
+
 const MercadoPagoWallet = ({ itemId, tipo, usuarioIdParam }: MercadoPagoProps) => {
   const [preferenceId, setPreferenceId] = useState(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,12 +25,7 @@ const MercadoPagoWallet = ({ itemId, tipo, usuarioIdParam }: MercadoPagoProps) =
     try {
       setError(null);
 
-      const response = await axios.post<string>(ENDPOINTS_WEBHOOKS.CREAR_PREFERENCIA, { 
-      itemId,
-      usuarioId: usuarioIdParam || user?.id,
-      tipo
-     });
-      const preferenceId = response.data;
+      const preferenceId = await crearPreferencia({ itemId, tipo, usuarioIdParam }, user?.id || 0);
 
       if (!preferenceId) {
         throw new Error("No se recibio preferenceId.");

@@ -36,7 +36,7 @@ export function Header() {
 
     return (
         <header className="header-container">
-            <Link to="/" className="home-logo-link" aria-label="Ir al inicio">
+            <Link to={ROUTES.HOME} className="home-logo-link" aria-label="Ir al inicio">
                 <img className="home-logo" src="/logo2.png" alt="KinePro" />
             </Link>
             <nav className='btn-container nav-buttons' aria-label="Navegacion principal">

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLocationState } from "../constants/useLocationState";
 import { calcularEdad, obtenerLimitesFechaNacimiento } from "../utils/formateador";
+import { ROUTES } from "../constants/config";
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento();
 
@@ -26,7 +27,7 @@ function Register({ email = "" }: RegisterProps) {
 
   const { setUser } = useAuth();
   const { typedState } = useLocationState();
-  const from = typedState?.from || "/";
+  const from = typedState?.from || ROUTES.HOME;
   const email_1 = location.state?.email || "";
 
   const [form, setForm] = useState<RegisterForm>({

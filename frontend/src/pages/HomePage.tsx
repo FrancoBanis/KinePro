@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./HomePage.css";
+import { ROUTES } from "../constants/config";
 
 interface NewsItem {
     id: number;
@@ -38,13 +39,13 @@ const quickActions: QuickAction[] = [
     {
         title: "Rutinas",
         description: "Explora programas disponibles por fecha, actividad y profesional.",
-        to: "/rutinas",
+        to: ROUTES.RUTINAS,
         label: "Ver rutinas",
     },
     {
         title: "Turnos",
         description: "Encuentra horarios disponibles y reserva el que mejor te quede.",
-        to: "/turnos",
+        to: ROUTES.TURNOS,
         label: "Ver turnos",
     },
 ];
@@ -65,8 +66,8 @@ export function HomePage() {
                         Reserva turnos, revisa rutinas y mantenete al dia con las novedades del centro desde una experiencia clara y liviana.
                     </p>
                     <div className="home-actions" aria-label="Acciones principales">
-                        <Link className="home-primary-action" to="/rutinas">Reservar rutina</Link>
-                        <Link className="home-secondary-action" to="/turnos">Reservar turno</Link>
+                        <Link className="home-primary-action" to={ROUTES.RUTINAS}>Reservar rutina</Link>
+                        <Link className="home-secondary-action" to={ROUTES.TURNOS}>Reservar turno</Link>
                     </div>
                 </div>
 

@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
 import './HistorialPagos.css'
+import { ROUTES } from '../constants/config'
 
 interface PagoClinicaData {
   idPago: number
@@ -79,8 +80,8 @@ function HistorialPagosClinica() {
     void loadPayments()
   }, [canViewClinicHistory, currentPage])
 
-  if (!isLoggedIn) return <Navigate to="/login" replace />
-  if (!canViewClinicHistory) return <Navigate to="/" replace />
+  if (!isLoggedIn) return <Navigate to={ROUTES.INICIAR_SESION} replace />
+  if (!canViewClinicHistory) return <Navigate to={ROUTES.HOME} replace />
 
   return (
     <section className="payment-history-page">

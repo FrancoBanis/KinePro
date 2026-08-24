@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { ROUTES } from "./constants/config";
 
 interface Props {
   children: React.ReactNode;
@@ -8,7 +9,7 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   const location = useLocation();
-  const hideHeader = location.pathname === "/pago-exitoso";
+  const hideHeader = location.pathname === ROUTES.PAGO_EXITOSO;
 
   return (
     <>
