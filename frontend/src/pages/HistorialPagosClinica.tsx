@@ -4,22 +4,10 @@ import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
 import './HistorialPagos.css'
 import { ROUTES } from '../constants/config'
+import type { PagoClinicaData } from '../constants/pagos'
+import { getHistorialPagosClinica } from '../services/historialService'
 
-interface PagoClinicaData {
-  idPago: number
-  nombreUsuario: string
-  correoUsuario: string
-  monto: number
-  nombreRutina: string
-  fecha: string
-}
 
-interface PaginaPagosClinica {
-  pagos: PagoClinicaData[]
-  paginaActual: number
-  totalPaginas: number
-  totalPagos: number
-}
 
 const moneyFormatter = new Intl.NumberFormat('es-AR', {
   style: 'currency',
@@ -48,23 +36,16 @@ function HistorialPagosClinica() {
       setLoading(true)
       setError(null)
       try {
-        const response = await axios.get<PaginaPagosClinica | PagoClinicaData[]>(
-          "http://localhost:8080/api/pagos/historial-clinica",
-          {
-            params: { pagina: currentPage },
-            withCredentials: true,
-          }
-        )
-        const data = response.data
+        const response = await getHistorialPagosClinica(currentPage)
 
-        if (Array.isArray(data)) {
-          setPayments(data)
-          setTotalPages(data.length > 0 ? 1 : 0)
-          setTotalPayments(data.length)
+        if (Array.isArray(response)) {
+          setPayments(response)
+          setTotalPages(response.length > 0 ? 1 : 0)
+          setTotalPayments(response.length)
         } else {
-          setPayments(Array.isArray(data.pagos) ? data.pagos : [])
-          setTotalPages(Number(data.totalPaginas) || 0)
-          setTotalPayments(Number(data.totalPagos) || 0)
+          setPayments(Array.isArray(response.pagos) ? response.pagos : [])
+          setTotalPages(Number(response.totalPaginas) || 0)
+          setTotalPayments(Number(response.totalPagos) || 0)
         }
       } catch (requestError: unknown) {
         if (axios.isAxiosError(requestError) && requestError.response?.status === 403) {

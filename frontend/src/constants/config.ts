@@ -108,3 +108,7 @@ export const ENDPOINTS_TIPO_RUTINA = {
     ELIMINAR: (id: number) => `${BACKEND_URL}/tipos-rutina/admin/${id}`,
     MODIFICAR: (id: number) => `${BACKEND_URL}/tipos-rutina/admin/${id}`,
 }
+export const ENDPOINTS_PAGOS = {
+    HISTORIAL_PAGOS: `${BACKEND_URL}/api/pagos/historial`,
+    HISTORIAL_PAGOS_CLINICA: `${BACKEND_URL}/api/pagos/historial-clinica`,
+}

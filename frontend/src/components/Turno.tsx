@@ -9,6 +9,7 @@ import { getCostoTurno, getRutina, estaInscriptoEnTurno, cancelarTurno } from ".
 import "./Cards.css";
 import { BotonesUsuarioTurno } from "./BotonesUsuarioTurno";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
+import { ROUTES } from "../constants/config";
 
 
 
@@ -86,7 +87,7 @@ export function Turno({ turnoRecibido, modo = "publico" }: { turnoRecibido: Turn
             id={turnoRecibido.id}
             usuarioLogueado={!!user}
             onAgendar={abrirPopUp}
-            onLogin={() => navigateWithState("/login",{from: location.pathname, abrirItemId: turnoRecibido.id, tipo:"turno"})}
+            onLogin={() => navigateWithState(ROUTES.INICIAR_SESION,{from: location.pathname, abrirItemId: turnoRecibido.id, tipo:"turno"})}
           />
           
         </div>

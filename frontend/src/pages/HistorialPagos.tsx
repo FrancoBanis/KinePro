@@ -3,13 +3,11 @@ import { Navigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
 import './HistorialPagos.css'
+import { ROUTES } from '../constants/config'
+import type { PagoData } from '../constants/pagos'
+import { getHistorialPagos } from '../services/historialService'
 
-interface PagoData {
-  idPago: number
-  fecha: string
-  monto: number
-  concepto: string
-}
+
 
 const moneyFormatter = new Intl.NumberFormat('es-AR', {
   style: 'currency',
@@ -30,11 +28,8 @@ function HistorialPagos() {
       setLoading(true)
       setError(null)
       try {
-        const response = await axios.get<PagoData[]>(
-          "http://localhost:8080/api/pagos/historial",
-          { withCredentials: true }
-        )
-        setPayments(response.data)
+        const response = await getHistorialPagos()
+        setPayments(response)
       } catch (requestError: unknown) {
         if (axios.isAxiosError(requestError) && requestError.response?.status === 403) {
           setError('No se pudo validar la sesión para consultar el historial de pagos.')
@@ -49,7 +44,7 @@ function HistorialPagos() {
     void loadPayments()
   }, [isLoggedIn])
 
-  if (!isLoggedIn) return <Navigate to="/login" replace />
+  if (!isLoggedIn) return <Navigate to={ROUTES.INICIAR_SESION} replace />
 
   return (
     <section className="payment-history-page">
