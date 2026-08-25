@@ -5,6 +5,8 @@ import TipoRutinaFormModal, { type TipoRutinaFormValues } from "../components/fo
 import type { TipoRutinaData } from "../constants/tipoRutina";
 import type { RutinaData } from "../constants/rutina";
 import { Turno } from "../components/Turno";
+import { crearOModificarTipo, eliminarTipo, obtenerTiposRutina } from "../services/tiposRutinaService";
+import { ENDPOINTS_TIPO_RUTINA } from "../constants/config";
 
 export function TipoRutinasPage() {
   const navigate = useNavigate();
@@ -32,9 +34,7 @@ export function TipoRutinasPage() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8080/tipos-rutina", {
-        credentials: "include",
-      });
+      const response = await obtenerTiposRutina(); 
 
       if (!response.ok) {
         const texto = await response.text();
@@ -77,28 +77,15 @@ export function TipoRutinasPage() {
       descripcion: values.descripcion,
     };
 
-    const url =
-      formMode === "create"
-        ? "http://localhost:8080/tipos-rutina/admin"
-        : `http://localhost:8080/tipos-rutina/admin/${tipoEnEdicion?.id}`;
+    if (formMode === "edit" && tipoEnEdicion?.id === undefined) {
+      alert("No se pudo identificar el tipo de rutina a editar");
+      return;
+    }
 
-    const method = formMode === "create" ? "POST" : "PUT";
+    const tipoId = tipoEnEdicion?.id;
 
-    try {
-      const response = await fetch(url, {
-        method,
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const texto = await response.text();
-        throw new Error(texto || "No se pudo guardar");
-      }
-
+    try {      
+      await crearOModificarTipo(payload, tipoId);
       setOpenForm(false);
       setTipoEnEdicion(null);
       await cargarTipos();
@@ -108,21 +95,12 @@ export function TipoRutinasPage() {
     }
   };
 
-  const eliminarTipo = async (id: number) => {
+  const preguntaEliminar = async (id: number) => {
     const confirmar = window.confirm("¿Seguro que querés eliminar este tipo de rutina?");
     if (!confirmar) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/tipos-rutina/admin/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        const texto = await response.text();
-        throw new Error(texto || "No se pudo eliminar");
-      }
-      
+      await eliminarTipo(id);
       await cargarTipos();
     } catch (error: any) {
       alert(error?.message || "Error al eliminar el tipo de rutina");
@@ -137,7 +115,7 @@ export function TipoRutinasPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/rutinas?activa=true&tipoRutinaId=${tipo.id}`,
+        ENDPOINTS_TIPO_RUTINA.OBTENER_RUTINAS_ASOCIADAS(tipo.id),
         {
           credentials: "include",
         }
@@ -237,7 +215,7 @@ export function TipoRutinasPage() {
                           <button
                             className="btn-log"
                             type="button"
-                            onClick={() => eliminarTipo(tipo.id)}
+                            onClick={() => preguntaEliminar(tipo.id)}
                           >
                             Eliminar
                           </button>

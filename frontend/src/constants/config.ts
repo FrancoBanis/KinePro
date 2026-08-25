@@ -101,3 +101,10 @@ export const ENDPOINTS_WEBHOOKS = {
     PROCESAR_PAGO : `${BACKEND_URL}/api/webhook/mercadopago`,
     CREAR_PREFERENCIA: `${BACKEND_URL}/api/pagos/crear-preferencia`,
 }
+export const ENDPOINTS_TIPO_RUTINA = {
+    OBTENER_TIPOS: `${BACKEND_URL}/tipos-rutina`,
+    OBTENER_RUTINAS_ASOCIADAS: (id: number) => `${BACKEND_URL}/rutinas?tipoRutinaId=${id}`,
+    CREAR: `${BACKEND_URL}/tipos-rutina/admin`,
+    ELIMINAR: (id: number) => `${BACKEND_URL}/tipos-rutina/admin/${id}`,
+    MODIFICAR: (id: number) => `${BACKEND_URL}/tipos-rutina/admin/${id}`,
+}
