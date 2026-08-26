@@ -104,7 +104,7 @@ export async function handleDesactivarRutina(rutinaId: number,  onSuccess?: () =
     });
     if (!response.ok) {
         const mensaje = await response.text();
-        throw new Error(mensaje || "No se pudo desactivar la rutina");
+        toast.error(mensaje || "No se pudo desactivar la rutina");
     }
     toast.success("Rutina desactivada de forma exitosa");
     onSuccess?.();
@@ -123,9 +123,9 @@ export async function handleEnviarAviso(idRutina: number , mensaje: String): Pro
             }
           );
           if (!response.ok) throw new Error (await response.text());
-            alert ("Aviso de rutina enviado correctamente");
+            toast.success("Aviso de rutina enviado correctamente");
           } catch (e: any) { 
-            alert("Error al enviar aviso" + e.message);
+            toast.error("Error al enviar aviso" + e.message);
           } 
 }
 export async function handleCalcularCosto (idRutina: number, idUsuario: number) : Promise<number> {

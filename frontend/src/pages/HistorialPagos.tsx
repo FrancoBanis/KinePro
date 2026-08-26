@@ -6,6 +6,7 @@ import './HistorialPagos.css'
 import { ROUTES } from '../constants/config'
 import type { PagoData } from '../constants/pagos'
 import { getHistorialPagos } from '../services/historialService'
+import { toast } from 'sonner'
 
 
 
@@ -19,22 +20,20 @@ function HistorialPagos() {
   const isLoggedIn = user !== null
   const [payments, setPayments] = useState<PagoData[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isLoggedIn) return
 
     const loadPayments = async () => {
       setLoading(true)
-      setError(null)
       try {
         const response = await getHistorialPagos()
         setPayments(response)
       } catch (requestError: unknown) {
         if (axios.isAxiosError(requestError) && requestError.response?.status === 403) {
-          setError('No se pudo validar la sesión para consultar el historial de pagos.')
+          toast.error('No se pudo validar la sesión para consultar el historial de pagos.')
         } else {
-          setError('No se pudo obtener el historial de pagos.')
+          toast.error('No se pudo obtener el historial de pagos.')
         }
       } finally {
         setLoading(false)
@@ -53,7 +52,7 @@ function HistorialPagos() {
           <h1>Historial de pagos</h1>
           <p>Consultá los pagos aprobados de tus turnos y rutinas.</p>
         </div>
-        {!loading && !error && payments.length > 0 && (
+        {!loading && payments.length > 0 && (
           <span className="payment-history-count">
             {payments.length} {payments.length === 1 ? 'pago' : 'pagos'}
           </span>
@@ -61,12 +60,11 @@ function HistorialPagos() {
       </div>
 
       {loading && <p className="payment-history-status">Cargando pagos...</p>}
-      {error && <div className="alert-danger payment-history-status">{error}</div>}
-      {!loading && !error && payments.length === 0 && (
+      {!loading && payments.length === 0 && (
         <p className="payment-history-empty">No hay pagos realizados</p>
       )}
 
-      {!loading && !error && payments.length > 0 && (
+      {!loading && payments.length > 0 && (
         <div className="payment-history-table-wrapper">
           <table className="payment-history-table">
             <thead>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/MercadoPagoWallet";
 import { recibirRespuestaColaRutina } from "../services/colaRutinaService";
+import { toast } from "sonner";
 
 export function ConfirmarColaRutina() {
   const { rutinaId, usuarioId } = useParams<{ rutinaId: string; usuarioId: string }>();
@@ -24,6 +25,7 @@ export function ConfirmarColaRutina() {
 
   const manejarRespuesta = async (respuesta: boolean) => {
     try {
+      toast.loading("Procesando tu respuesta, por favor espera...");
       setCargando(true);
       await recibirRespuestaColaRutina(Number(rutinaId), Number(usuarioId), respuesta);
       
@@ -33,8 +35,9 @@ export function ConfirmarColaRutina() {
         setRechazado(true);
       }
     } catch (e) {
-      alert("Ocurrió un error al procesar tu respuesta. Por favor, intenta de nuevo.");
+      toast.error("Ocurrió un error al procesar tu respuesta. Por favor, intenta de nuevo.");
     } finally {
+      toast.dismiss();
       setCargando(false);
     }
   };

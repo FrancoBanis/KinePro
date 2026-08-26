@@ -60,23 +60,15 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
 
   const desactivarRutina = async () => {
   if (tienePacientes) {
-    alert("No se puede desactivar la rutina con pacientes inscriptos.");
+    toast.error("No se puede desactivar la rutina con pacientes inscriptos.");
     return;
   }
-
-  try {
     await handleDesactivarRutina(rutinaRecibida.id, () => {onRutinaDesactivada?.();});
-  } catch (e: any) {
-    toast.error(e?.message || "No se pudo desactivar la rutina");
-  }
-};
-   const enviarAviso = async (texto : String) => {
-    try {
+  };
+  
+  const enviarAviso = async (texto : String) => {
       await handleEnviarAviso(rutinaRecibida.id, texto);
-    } catch (e: any) {
-      alert(e?.message || "No se pudo enviar el aviso");
-    }
-      };
+    };
 
   const abrirPopUp = async () => {
     if (!user?.id) {
@@ -115,7 +107,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
       await handleCancelarRutina(rutinaRecibida.id, user.id);
       setEstaInscripto(false);
     } catch (err) {
-      alert("Error al cancelar la rutina")
+      toast.error("Error al cancelar la rutina");
     } finally {
       setLoadingInscripcion(false)
     }

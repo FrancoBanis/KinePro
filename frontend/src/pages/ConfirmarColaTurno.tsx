@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/MercadoPagoWallet";
 import { recibirRespuestaCola } from "../services/colaTurnoService";
+import { toast } from "sonner";
 
 export function ConfirmarColaTurno() {
   const { turnoId, usuarioId } = useParams();
@@ -26,14 +27,16 @@ export function ConfirmarColaTurno() {
     try {
       setCargando(true);
       await recibirRespuestaCola(Number(turnoId), Number(usuarioId), respuesta);
-      
+      const toastId = toast.loading("Procesando tu respuesta, por favor espera...");
       if (respuesta) {
         setAceptado(true);
+        toast.success("¡Turno aceptado! Procedé con el pago para confirmar tu lugar.", { id: toastId });
       } else {
         setRechazado(true);
+        toast.error("Turno rechazado.", { id: toastId }); 
       }
     } catch (e) {
-      alert("Error al procesar la respuesta.");
+      toast.error("Ocurrió un error al procesar tu respuesta. Por favor, intenta de nuevo.");
     } finally {
       setCargando(false);
     }

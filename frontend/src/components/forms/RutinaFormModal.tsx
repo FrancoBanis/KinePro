@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import FormModal from "../FormModal";
 import type { TipoRutinaData } from "../../constants/tipoRutina";
+import { toast } from "sonner";
 
 type Profesional = {
   id: number;
@@ -78,13 +79,13 @@ export default function RutinaFormModal({
         });
 
         if (!response.ok) {
-          throw new Error("Error al cargar tipos");
+          toast.error("Error al cargar tipos");
         }
 
         const data = await response.json();
         setTiposRutina(data || []);
       } catch (error) {
-        console.error(error);
+        toast.error("Error al cargar tipos: " + error);
         setTiposRutina([]);
       } finally {
         setLoadingTipos(false);
@@ -106,13 +107,13 @@ export default function RutinaFormModal({
         });
 
         if (!response.ok) {
-          throw new Error("Error al cargar profesionales");
+          toast.error("Error al cargar profesionales");
         }
 
         const data = await response.json();
         setProfesionalesDisponibles(data || []);
       } catch (error) {
-        console.error(error);
+        toast.error("Error al cargar profesionales: " + error);
         setProfesionalesDisponibles([]);
       } finally {
         setLoadingProfesionales(false);

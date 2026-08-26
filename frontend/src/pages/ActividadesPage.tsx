@@ -6,6 +6,7 @@ import { Turno } from '../components/Turno'
 import type { TurnoData } from '../constants/turno'
 import { getMisTurnosProfesional } from '../services/turnoService'
 import { ROUTES } from '../constants/config'
+import { toast } from 'sonner'
 
 export function ActividadesPage() {
   const { user } = useAuth()
@@ -24,7 +25,7 @@ export function ActividadesPage() {
         const data = await getMisTurnosProfesional(user.id!)
         setTurnos(data)
       } catch {
-        console.error('Error al cargar turnos del profesional')
+        toast.error('Error al cargar los turnos. Por favor, intenta nuevamente más tarde.')
       }
     }
 

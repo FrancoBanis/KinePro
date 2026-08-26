@@ -6,6 +6,7 @@ import { buscarUsuarios, crearUsuario, actualizarUsuario, desactivarUsuario } fr
 import { calcularEdad, obtenerLimitesFechaNacimiento } from '../utils/formateador'
 import './AdministrarUsuarios.css'
 import type { CreateUserForm, UsuarioData } from '../constants/usuarioData'
+import { toast } from 'sonner'
 
 const emptyForm: CreateUserForm = { email: '', nombre: '', apellido: '', fechaNacimiento: '', dni: 0 }
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
@@ -13,8 +14,6 @@ const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
 function AdministrarUsuarios() {
   const [createOpen, setCreateOpen] = useState(false)
   const [form, setForm] = useState<CreateUserForm>(emptyForm)
-  const [createError, setCreateError] = useState<string | null>(null)
-  const [createSuccess, setCreateSuccess] = useState<string | null>(null)
 
   const [query, setQuery] = useState('')
   const [searchResults, setSearchResults] = useState<UsuarioData[]>([])
@@ -24,8 +23,6 @@ function AdministrarUsuarios() {
 
   const [selectedUser, setSelectedUser] = useState<UsuarioData | null>(null)
   const [editForm, setEditForm] = useState<Partial<UsuarioData>>({})
-  const [editError, setEditError] = useState<string | null>(null)
-  const [pageSuccess, setPageSuccess] = useState<string | null>(null)
   const [deactivateLoading, setDeactivateLoading] = useState(false)
 
   useEffect(() => {
@@ -72,8 +69,7 @@ function AdministrarUsuarios() {
     if (!matchedUser) return
     setSelectedUser(matchedUser)
     setEditForm({ ...matchedUser, rol: String(matchedUser.rol) })
-    setEditError(null)
-    setPageSuccess(null)
+    toast.dismiss()
     setQuery('')
     setMatchedUser(null)
   }
@@ -86,23 +82,20 @@ function AdministrarUsuarios() {
   const handleCreateClose = () => {
     setCreateOpen(false)
     setForm(emptyForm)
-    setCreateError(null)
-    setCreateSuccess(null)
   }
 
   const handleCreateSubmit = async () => {
-    setCreateError(null)
-    setCreateSuccess(null)
     if (calcularEdad(form.fechaNacimiento) < 13) {
-      setCreateError('Edad inválida. La edad mínima es 13 años.')
+      toast.error('Edad inválida. La edad mínima es 13 años.')
       return
     }
     try {
       await crearUsuario(form)
-      setCreateSuccess(`Usuario ${form.nombre} ${form.apellido} creado correctamente.`)
+      toast.success(`Usuario ${form.nombre} ${form.apellido} creado correctamente.`)
       setForm(emptyForm)
+      setCreateOpen(false)
     } catch (err: any) {
-      setCreateError(err?.message)
+      toast.error(err?.message)
     }
   }
 
@@ -114,12 +107,9 @@ function AdministrarUsuarios() {
   const handleEditClose = () => {
     setSelectedUser(null)
     setEditForm({})
-    setEditError(null)
   }
 
   const handleEditSubmit = async () => {
-    setEditError(null)
-    setPageSuccess(null)
     try {
       await actualizarUsuario({
         nombre: editForm.nombre,
@@ -130,25 +120,22 @@ function AdministrarUsuarios() {
         rol: editForm.rol,
       })
       handleEditClose()
-      setPageSuccess('Datos actualizados correctamente.')
+      toast.success('Datos actualizados correctamente.')
     } catch (err: any) {
-      setEditError(err?.message)
+      toast.error(err?.message)
     }
   }
 
   const handleDeactivateUser = async () => {
     if (!selectedUser) return
     if (!window.confirm(`¿Desactivar la cuenta de ${selectedUser.nombre} ${selectedUser.apellido}? La cuenta y sus datos se conservarán.`)) return
-
-    setEditError(null)
-    setPageSuccess(null)
     setDeactivateLoading(true)
     try {
       await desactivarUsuario(selectedUser.id)
       handleEditClose()
-      setPageSuccess('Cuenta desactivada correctamente.')
+      toast.success('Cuenta desactivada correctamente.')
     } catch (err: any) {
-      setEditError(err?.message)
+      toast.error(err?.message)
     } finally {
       setDeactivateLoading(false)
     }
@@ -190,8 +177,6 @@ function AdministrarUsuarios() {
         )}
       </div>
 
-      {pageSuccess && <div className="alert-success mt-2">{pageSuccess}</div>}
-
       <FormModal
         isOpen={createOpen}
         onClose={handleCreateClose}
@@ -229,8 +214,6 @@ function AdministrarUsuarios() {
             <input type="number" name="dni" value={form.dni} onChange={handleChange} required />
           </label>
         </div>
-        {createError && <div className="alert-danger mt-2">{createError}</div>}
-        {createSuccess && <div className="alert-success mt-2">{createSuccess}</div>}
       </FormModal>
 
       <FormModal
@@ -289,7 +272,6 @@ function AdministrarUsuarios() {
               .map(([value, label]) => (<option key={value} value={value}>{label}</option>))}
           </select>
         </div>
-        {editError && <div className="alert-danger mt-2">{editError}</div>}
       </FormModal>
     </div>
   )

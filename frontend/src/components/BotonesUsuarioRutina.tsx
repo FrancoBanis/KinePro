@@ -8,6 +8,7 @@ import type { reembolsoDTO } from "../constants/reembolso";
 import { getTurnosSimilares, calcularReembolso } from "../services/turnoService";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
 import { createPortal } from "react-dom";
+import { toast } from "sonner";
 
 type modo = 'publico' | 'misTurnos';
 type DetalleReembolsoTurno = { turno: TurnoData; reembolso: reembolsoDTO };
@@ -61,7 +62,7 @@ export function BotonesUsuarioRutina({
             const data = await getRutinasSimilares(id, user.id);
             setRutinasSimilares(data || []);
         } catch {
-            setErrorSimilares("Error al cargar las rutinas similares");
+            toast.error("Error al cargar las rutinas similares");
         } finally {
             setLoadingSimilares(false);
         }
@@ -72,13 +73,14 @@ export function BotonesUsuarioRutina({
         setErrorReprogramar(null);
         try {
             await reprogramarRutina(user.id, id, rutinaNuevaId);
-            alert("¡Rutina reprogramada con éxito!");
+            toast.success("¡Rutina reprogramada con éxito!");
             setMostrarPopUpReprogramar(false);
             
             // Forzamos la recarga o actualización de la vista para reflejar la nueva inscripción.
             window.location.reload(); 
         } catch (err: any) {
             setErrorReprogramar(err?.message || "Ocurrió un error al reprogramar.");
+            toast.error("Error al reprogramar la rutina:" + err?.meesage);
         } finally {
             setLoadingReprogramar(false);
         }

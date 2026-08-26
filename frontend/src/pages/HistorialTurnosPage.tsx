@@ -4,6 +4,7 @@ import type { ProfesionalData, TurnoData } from "../constants/turno";
 import { getAllTurnos, getProfesionales, getRutina } from "../services/turnoService";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
 import "./RutinasYTurnos.css";
+import { toast } from "sonner";
 
 interface TurnoConRutina extends TurnoData {
     rutinaNombre?: string;
@@ -14,14 +15,12 @@ export function HistorialTurnosPage() {
     const [turnos, setTurnos] = useState<TurnoConRutina[]>([]);
     const [profesionales, setProfesionales] = useState<ProfesionalData[]>([]);
     const [profesionalFiltro, setProfesionalFiltro] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let ignore = false;
         const cargarDatos = async () => {
             setLoading(true);
-            setError(null);
             try {
                 const [data, profs] = await Promise.all([
                     getAllTurnos(),
@@ -35,7 +34,7 @@ export function HistorialTurnosPage() {
                                 const r = await getRutina(t.id_rutina);
                                 rutinaNombre = r.nombre;
                             } catch {
-                                rutinaNombre = "Rutina desconocida";
+                                toast.error(`Error al obtener la rutina para el turno ${t.id}.`);
                             }
                         }
                         return { ...t, rutinaNombre };
@@ -46,7 +45,7 @@ export function HistorialTurnosPage() {
                     setProfesionales(profs);
                 }
             } catch (err) {
-                if (!ignore) setError("Error al obtener los turnos: " + err);
+                toast.error("Error al obtener los turnos: " + err);
             } finally {
                 if (!ignore) setLoading(false);
             }
@@ -116,7 +115,6 @@ export function HistorialTurnosPage() {
                     </div>
                 </div>
 
-                {error && <p className="activity-error">{error}</p>}
                 {loading ? (
                     <div className="activity-skeleton-grid" aria-label="Cargando">
                         {Array.from({ length: 3 }).map((_, i) => (

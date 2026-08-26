@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ROUTES } from "../constants/config";
+import { toast } from "sonner";
 
 export function EditarDatosPage() {
     const { user, setUser, logout } = useAuth();
@@ -11,8 +12,6 @@ export function EditarDatosPage() {
     const [nombre, setNombre] = useState(user?.nombre ?? "");
     const [apellido, setApellido] = useState(user?.apellido ?? "");
     const [dni, setDni] = useState(user?.dni ? String(user.dni) : "");
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
     const [deactivateLoading, setDeactivateLoading] = useState(false);
 
     useEffect(() => {
@@ -27,12 +26,9 @@ export function EditarDatosPage() {
 
         const dniNumber = Number(dni);
         if (!nombre.trim() || !apellido.trim() || Number.isNaN(dniNumber)) {
-            setError("Completá nombre, apellido y DNI válidos.");
+            toast.error("Completá nombre, apellido y DNI válidos.");
             return;
         }
-
-        setError(null);
-        setSuccess(null);
 
         try {
             const response = await axios.put(
@@ -47,10 +43,9 @@ export function EditarDatosPage() {
             );
 
             setUser(response.data);
-            setSuccess("Datos actualizados correctamente.");
+            toast.success("Datos actualizados correctamente.");
         } catch (err) {
-            console.error(err);
-            setError("No se pudieron guardar los cambios.");
+            toast.error("No se pudieron guardar los cambios.");
         }
     };
 
@@ -58,8 +53,6 @@ export function EditarDatosPage() {
         if (!user?.id) return;
         if (!window.confirm("¿Desactivar tu cuenta? Vas a cerrar sesión y tus datos se conservarán.")) return;
 
-        setError(null);
-        setSuccess(null);
         setDeactivateLoading(true);
 
         try {
@@ -71,8 +64,7 @@ export function EditarDatosPage() {
             logout();
             navigate(ROUTES.HOME);
         } catch (err) {
-            console.error(err);
-            setError("No se pudo desactivar la cuenta.");
+            toast.error("No se pudo desactivar la cuenta.");
         } finally {
             setDeactivateLoading(false);
         }
@@ -136,12 +128,10 @@ export function EditarDatosPage() {
                             onClick={handleDeactivateAccount}
                             disabled={deactivateLoading}
                         >
-                            {deactivateLoading ? "Desactivando..." : "Desactivar cuenta"}
+                            {deactivateLoading ? toast.loading("Desactivando...") : "Desactivar cuenta"}
                         </button>
                     </div>
                 </form>
-                {error && <div className="alert alert-danger">{error}</div>}
-                {success && <div className="alert alert-success">{success}</div>}
         </section>
     )
 }

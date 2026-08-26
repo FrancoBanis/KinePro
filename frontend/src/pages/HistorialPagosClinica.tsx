@@ -6,6 +6,7 @@ import './HistorialPagos.css'
 import { ROUTES } from '../constants/config'
 import type { PagoClinicaData } from '../constants/pagos'
 import { getHistorialPagosClinica } from '../services/historialService'
+import { toast } from 'sonner'
 
 
 
@@ -27,14 +28,12 @@ function HistorialPagosClinica() {
   const [totalPages, setTotalPages] = useState(0)
   const [totalPayments, setTotalPayments] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!canViewClinicHistory) return
 
     const loadPayments = async () => {
       setLoading(true)
-      setError(null)
       try {
         const response = await getHistorialPagosClinica(currentPage)
 
@@ -49,9 +48,9 @@ function HistorialPagosClinica() {
         }
       } catch (requestError: unknown) {
         if (axios.isAxiosError(requestError) && requestError.response?.status === 403) {
-          setError('No tenes permisos para consultar el historial de pagos de la clinica.')
+          toast.error('No tenes permisos para consultar el historial de pagos de la clinica.')
         } else {
-          setError('No se pudo obtener el historial de pagos de la clinica.')
+          toast.error('No se pudo obtener el historial de pagos de la clinica.')
         }
       } finally {
         setLoading(false)
@@ -71,7 +70,7 @@ function HistorialPagosClinica() {
           <h1>Historial de pagos de la clinica</h1>
           <p>Consulta los pagos aprobados de todos los pacientes.</p>
         </div>
-        {!loading && !error && totalPayments > 0 && (
+        {!loading && totalPayments > 0 && (
           <span className="payment-history-count">
             {totalPayments} {totalPayments === 1 ? 'pago' : 'pagos'}
           </span>
@@ -79,12 +78,11 @@ function HistorialPagosClinica() {
       </div>
 
       {loading && <p className="payment-history-status">Cargando pagos...</p>}
-      {error && <div className="alert-danger payment-history-status">{error}</div>}
-      {!loading && !error && payments.length === 0 && (
+      {!loading && payments.length === 0 && (
         <p className="payment-history-empty">No hay pagos realizados.</p>
       )}
 
-      {!loading && !error && payments.length > 0 && (
+      {!loading && payments.length > 0 && (
         <>
           <div className="payment-history-table-wrapper">
             <table className="payment-history-table">

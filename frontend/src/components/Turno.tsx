@@ -22,17 +22,12 @@ export function Turno({ turnoRecibido, modo = "publico" }: { turnoRecibido: Turn
   const [loadingTotal, setLoadingTotal] = React.useState(false);
   const [errorTotal, setErrorTotal] = React.useState<string | null>(null);
   const [rutina, setRutina] = React.useState<{ nombre?: string } | null>(null);
-
-  const lleno = (turnoRecibido.pacientes?.length ?? turnoRecibido.cantidadDePacientesActuales ?? 0) >= turnoRecibido.cupoMaxPacientes;
-  const turnoLleno = lleno;
   const { user } = useAuth();
   const { typedState, navigateWithState } = useLocationState();
  const [cantidadPacientes, setCantidadPacientes] = React.useState(
     turnoRecibido.cantidadDePacientesActuales ?? turnoRecibido.pacientes?.length ?? 0
   );
-  const inactivo = turnoRecibido.activa === false;
-  const [errorCancelar, setErrorCancelar] = React.useState<string | null>(null);
-  
+  const inactivo = turnoRecibido.activa === false;  
 
   const abrirPopUp = useCallback(async () => {
     setMostrarPopUp(true);
