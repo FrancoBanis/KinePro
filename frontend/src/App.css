@@ -333,12 +333,26 @@ main {
   }
 }
 
-.toast-success {
-  background: #10b981;
-  border-left: 4px solid #059669;
+.sonner-success {
+  background: linear-gradient(135deg, #88B536 0%, #6fa428 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(136, 181, 54, 0.3) !important;
 }
 
-.toast-error {
-  background: #ef4444;
-  border-left: 4px solid #dc2626;
+.sonner-error {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3) !important;
+}
+
+.sonner-loading {
+  background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3) !important;
+}
+
+.sonner-info {
+  background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3) !important;
 }

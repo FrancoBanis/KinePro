@@ -28,6 +28,7 @@ function RegisterRoute() {
 export default function  AppRoutes() {
   return (
     <Routes>
+      
       <Route path={ROUTES.HOME} element={<HomePage />} />
       <Route path={ROUTES.REGISTRO} element={<RegisterRoute />} />
       <Route path={ROUTES.INICIAR_SESION} element={<LoginPage />} />

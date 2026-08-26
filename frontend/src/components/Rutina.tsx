@@ -5,14 +5,17 @@ import "./Cards.css";
 import { useAuth } from "../context/AuthContext";
 import React, { useEffect } from "react";
 import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/MercadoPagoWallet";
-import { useLocationState } from "../constants/useLocationState";
+import { useLocationState } from "./hooks/useLocationState";
 import EnvioAviso from "./forms/EnviarAvisoModal";
 import {handleDesactivarRutina,
   handleEnviarAviso,
   handleCalcularCosto,
-  handleCancelarRutina
+  handleCancelarRutina,
+  
 } from "../services/rutinaService";
 import { BotonesUsuarioRutina } from "./BotonesUsuarioRutina";
+import { toast } from "sonner";
+import { ROUTES } from "../constants/config";
 
 type Props = {
   rutinaRecibida: RutinaData;
@@ -20,9 +23,10 @@ type Props = {
   onEditar?: () => void;
   modo?: 'publico' | 'misTurnos';
   accionAdicional?: React.ReactNode;
+  onRutinaDesactivada?: () => void;
 };
 
-export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, onEditar, accionAdicional }: Props) {
+export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, onEditar, accionAdicional, onRutinaDesactivada }: Props) {
   const [mostrarPopUp, setMostrarPopUp] = React.useState(false);
   const [costoTotal, setCostoTotal] = React.useState<number | null>(null);
   const [loadingTotal, setLoadingTotal] = React.useState(false);
@@ -61,9 +65,9 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
   }
 
   try {
-    await handleDesactivarRutina(rutinaRecibida.id);
+    await handleDesactivarRutina(rutinaRecibida.id, () => {onRutinaDesactivada?.();});
   } catch (e: any) {
-    alert(e?.message || "No se pudo desactivar la rutina");
+    toast.error(e?.message || "No se pudo desactivar la rutina");
   }
 };
    const enviarAviso = async (texto : String) => {
@@ -158,7 +162,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
               loadingInscripcion={loadingInscripcion}
               onCancelar={handleCancelar}
               onAgendar={abrirPopUp}
-              onLogin={() => navigateWithState("/iniciar-sesion",{from: location.pathname, abrirItemId: rutinaRecibida.id, tipo:"rutina"})}             
+              onLogin={() => navigateWithState(ROUTES.INICIAR_SESION,{from: location.pathname, abrirItemId: rutinaRecibida.id, tipo:"rutina"})}             
             />
             {accionAdicional}
           </div>

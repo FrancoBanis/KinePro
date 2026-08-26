@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useLocationState } from "../constants/useLocationState";
+import { useLocationState } from "../components/hooks/useLocationState";
 import { ROUTES } from "../constants/config";
 import { verificarToken } from "../services/usuarioService";
 

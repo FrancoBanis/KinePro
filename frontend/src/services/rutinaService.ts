@@ -1,7 +1,7 @@
 import axios from "axios";
 import { type RutinaFormValues } from "../components/forms/RutinaFormModal";
 import { ENDPOINTS_RUTINA } from "../constants/config";
-
+import { toast } from 'sonner';
 export async function getRutinasActivas() : Promise<any> {
   const response = await fetch(ENDPOINTS_RUTINA.RUTINAS_ACTIVAS, {
     credentials: "include",
@@ -97,7 +97,7 @@ export async function reprogramarRutina(idUsuario: number, idRutinaActual: numbe
   alert("Reprogramación exitosa");
   return response.data;
 }
-export async function handleDesactivarRutina(rutinaId: number): Promise<void> {
+export async function handleDesactivarRutina(rutinaId: number,  onSuccess?: () => void): Promise<void> {
     const response = await fetch(ENDPOINTS_RUTINA.DESACTIVAR_RUTINA(rutinaId), {
       method: "PATCH",
       credentials: "include",
@@ -106,8 +106,8 @@ export async function handleDesactivarRutina(rutinaId: number): Promise<void> {
         const mensaje = await response.text();
         throw new Error(mensaje || "No se pudo desactivar la rutina");
     }
-    alert("Rutina desactivada de forma exitosa");
-    window.location.reload();
+    toast.success("Rutina desactivada de forma exitosa");
+    onSuccess?.();
     return;
 }
 

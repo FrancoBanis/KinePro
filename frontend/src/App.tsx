@@ -3,18 +3,22 @@ import Layout from './layout'
 import AppRoutes from './routes'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
-function App() {
+import { Toaster } from 'sonner';
 
+function App() {
   return (
-    <>
-      <BrowserRouter>
-        <AuthProvider>
-          <Layout>
-            <AppRoutes />
-          </Layout>
-        </AuthProvider>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Toaster 
+        position="top-center"
+        richColors
+        theme="light"
+      />
+      <AuthProvider>
+        <Layout>
+          <AppRoutes />
+        </Layout>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

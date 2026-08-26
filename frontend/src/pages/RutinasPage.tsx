@@ -32,7 +32,7 @@ export function RutinasPage() {
     
     // Estado dinámico para saber en qué rutinas ya está anotado en cola el usuario
     const [colasEspera, setColasEspera] = useState<Record<number, boolean>>({});
-
+    
     const cargarRutinas = async (ignore = false) => {
         setLoadingRutinas(true);
         setErrorRutina(null);
@@ -54,7 +54,9 @@ export function RutinasPage() {
             if (!ignore) setLoadingRutinas(false);
         }
     };
-
+    const handleDesactivarRutina = () => {
+        cargarRutinas();
+    };
     // Función para verificar si el usuario logueado ya está en la cola de las rutinas llenas
     const verificarColasEspera = async (rutinasCargadas: RutinaData[]) => {
         if (!user?.id) return;
@@ -294,6 +296,7 @@ export function RutinasPage() {
                                     puedeEditar={puedeEditarRutinas}
                                     onEditar={() => abrirEditarRutina(rutina)}
                                     accionAdicional={accionCola}
+                                    onRutinaDesactivada={handleDesactivarRutina}
                                 />
                             );
                         })}

@@ -4,7 +4,7 @@ import { type TurnoData } from "../constants/turno";
 import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/MercadoPagoWallet";
 import { useAuth } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useLocationState } from "../constants/useLocationState";
+import { useLocationState } from "./hooks/useLocationState";
 import { getCostoTurno, getRutina, estaInscriptoEnTurno, cancelarTurno } from "../services/turnoService";
 import "./Cards.css";
 import { BotonesUsuarioTurno } from "./BotonesUsuarioTurno";
