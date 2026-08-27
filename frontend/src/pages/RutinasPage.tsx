@@ -9,6 +9,7 @@ import { getRutinasActivas, handleCrearRutina, handleModificarRutina } from "../
 
 // IMPORTAMOS TU NUEVO SERVICIO DE COLA DE RUTINAS
 import { agregarAColaRutina, estaEnColaRutina } from "../services/colaRutinaService"; 
+import { toast } from "sonner";
 
 const pageContent = {
     eyebrow: "Rutinas",
@@ -88,7 +89,7 @@ export function RutinasPage() {
                     const enCola = await estaEnColaRutina(rutina.id, user.id!);
                     nuevoEstadoColas[rutina.id] = enCola;
                 } catch (err) {
-                    console.error(`Error al verificar estado de cola de rutina ${rutina.id}:`, err);
+                    toast.error(`Error al verificar estado de cola de rutina ${rutina.id}: ${err}`);
                 }
             })
         );
@@ -147,15 +148,19 @@ export function RutinasPage() {
             
             // Actualizamos el estado local inmediatamente
             setColasEspera((prev) => ({ ...prev, [rutinaId]: true }));
-            alert("¡Te anotaste exitosamente a la cola de espera de la rutina!");
+            toast.success("¡Te anotaste exitosamente a la cola de espera de la rutina!");
         } catch (e: any) {
-            alert(e?.message || "Error al agregar a la cola de espera");
+            toast.error(e?.message || "Error al agregar a la cola de espera");
         }
     };
 
     const handleSubmitRutina = async (values: RutinaFormValues) => {
             if (values.fechaInicio > values.fechaFin) {
-                alert("La fecha de inicio debe ser anterior a la fecha de finalización");
+                toast.error("La fecha de inicio debe ser anterior a la fecha de finalización");
+            return;
+        }
+            if (values.horaInicio >= values.horaFin) {
+                toast.error("La hora de inicio debe ser anterior a la hora de finalización");
             return;
         }
         const payload = {
@@ -179,10 +184,9 @@ export function RutinasPage() {
                 setOpenForm(false);
                 setRutinaEnEdicion(null);
                 await cargarRutinas();
-                alert("Rutina creada exitosamente");
+                toast.success("Rutina creada exitosamente");
             } catch (error) {
-                console.error(error);
-                alert("Error al guardar la rutina");
+                toast.error("Error al guardar la rutina");
             }
 
             return;
@@ -194,10 +198,10 @@ export function RutinasPage() {
             setOpenForm(false);
             setRutinaEnEdicion(null);
             await cargarRutinas();
-            alert(result.message);
+            toast.success(result.message);
         } catch (error) {
             const msg = error instanceof Error ? error.message : "Error desconocido";
-            alert(msg);
+            toast.error(msg);
         }
         return;
         }

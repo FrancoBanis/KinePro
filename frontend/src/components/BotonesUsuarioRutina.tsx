@@ -24,6 +24,7 @@ interface Props {
     onCancelar: () => void;
     onAgendar: () => void;
     onLogin: () => void;
+    onReprogramarRutina?: () => void;
 }
 
 
@@ -38,6 +39,7 @@ export function BotonesUsuarioRutina({
     onCancelar,
     onAgendar,
     onLogin,
+    onReprogramarRutina
 } :  Props) {
     const { user } = useAuth();
     const [loadingContador, setLoadingContador] = useState<boolean>(true);
@@ -75,9 +77,7 @@ export function BotonesUsuarioRutina({
             await reprogramarRutina(user.id, id, rutinaNuevaId);
             toast.success("¡Rutina reprogramada con éxito!");
             setMostrarPopUpReprogramar(false);
-            
-            // Forzamos la recarga o actualización de la vista para reflejar la nueva inscripción.
-            window.location.reload(); 
+            onReprogramarRutina?.();
         } catch (err: any) {
             setErrorReprogramar(err?.message || "Ocurrió un error al reprogramar.");
             toast.error("Error al reprogramar la rutina:" + err?.meesage);

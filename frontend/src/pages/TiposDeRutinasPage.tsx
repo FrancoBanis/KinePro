@@ -7,6 +7,7 @@ import type { RutinaData } from "../constants/rutina";
 import { Turno } from "../components/Turno";
 import { crearOModificarTipo, eliminarTipo, obtenerTiposRutina } from "../services/tiposRutinaService";
 import { ENDPOINTS_TIPO_RUTINA } from "../constants/config";
+import { toast } from "sonner";
 
 export function TipoRutinasPage() {
   const navigate = useNavigate();
@@ -38,13 +39,13 @@ export function TipoRutinasPage() {
 
       if (!response.ok) {
         const texto = await response.text();
-        throw new Error(texto || "Error al cargar tipos");
+        toast.error(texto || "Error al cargar tipos");
       }
 
       const data = await response.json();
       setTipos(data || []);
     } catch {
-      setError("Error al obtener los tipos de rutina");
+      toast.error("Error al obtener los tipos de rutina");
     } finally {
       setLoading(false);
     }
@@ -68,7 +69,7 @@ export function TipoRutinasPage() {
 
   const guardarTipo = async (values: TipoRutinaFormValues) => {
     if (!values.nombre.trim()) {
-      alert("El nombre es obligatorio");
+      toast.error("El nombre es obligatorio");
       return;
     }
 
@@ -78,7 +79,7 @@ export function TipoRutinasPage() {
     };
 
     if (formMode === "edit" && tipoEnEdicion?.id === undefined) {
-      alert("No se pudo identificar el tipo de rutina a editar");
+      toast.error("No se pudo identificar el tipo de rutina a editar");
       return;
     }
 
@@ -89,9 +90,9 @@ export function TipoRutinasPage() {
       setOpenForm(false);
       setTipoEnEdicion(null);
       await cargarTipos();
-      alert("Creacion de tipo de rutina exitosa");
+      toast.success("Tipo de rutina creada exitosamente");
     } catch {
-      alert("Error al guardar el tipo de rutina");
+      toast.error("Error al guardar el tipo de rutina");
     }
   };
 
@@ -101,9 +102,10 @@ export function TipoRutinasPage() {
 
     try {
       await eliminarTipo(id);
+      toast.success("Tipo de rutina eliminada exitosamente");
       await cargarTipos();
     } catch (error: any) {
-      alert(error?.message || "Error al eliminar el tipo de rutina");
+      toast.error(error?.message || "Error al eliminar el tipo de rutina");
     }
   };
 

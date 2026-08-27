@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { procesarPago } from "../services/transaccionService";
 import { BACKEND_URL, ROUTES } from "../constants/config";
+import { toast } from "sonner";
 
 export function PagoExitoso() {
   const [searchParams] = useSearchParams();
@@ -18,7 +19,7 @@ export function PagoExitoso() {
           await procesarPago(paymentId);
         }
       } catch (err) {
-        console.error("Error procesando pago:", err);
+        toast.error(`Error procesando pago: ${err}`);
       } finally {
         setProcesando(false);
       }

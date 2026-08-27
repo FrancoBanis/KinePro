@@ -8,6 +8,7 @@ import { obtenerLimitesFechaNacimiento } from '../utils/formateador'
 import './VerEmpleados.css'
 import { ROUTES } from '../constants/config'
 import type { UsuarioData } from '../constants/usuarioData'
+import { toast } from 'sonner'
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
 
@@ -155,7 +156,7 @@ function VerEmpleados() {
         undefined,
         { withCredentials: true }
       )
-      setPageSuccess('Cuenta desactivada correctamente.')
+      toast.success('Cuenta desactivada correctamente.')
       await loadEmployees()
     } catch (error: unknown) {
       setEmployeesError(

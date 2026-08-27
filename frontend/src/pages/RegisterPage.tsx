@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { useLocationState } from "../components/hooks/useLocationState";
 import { calcularEdad, obtenerLimitesFechaNacimiento } from "../utils/formateador";
 import { ROUTES } from "../constants/config";
+import { toast } from "sonner";
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento();
 
@@ -38,7 +39,6 @@ function Register({ email = "" }: RegisterProps) {
     dni: 0,
   });
 
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,12 +55,8 @@ function Register({ email = "" }: RegisterProps) {
   ) => {
     e.preventDefault();
 
-    setError(null);
-
     if (calcularEdad(form.fechaNacimiento) < 13) {
-      setError(
-        "Error: Edad inválida. La edad mínima es 13 años."
-      );
+      toast.error("Error: Edad inválida. La edad mínima es 13 años.");
       return;
     }
 
@@ -86,12 +82,12 @@ function Register({ email = "" }: RegisterProps) {
       });
     } catch (err: any) {
       if (axios.isAxiosError(err) && err.response) {
-        setError(
+        toast.error(
           err.response.data?.message ||
             "Error al registrar usuario"
         );
       } else {
-        setError("Error al conectar con el servidor.");
+        toast.error("Error al conectar con el servidor.");
       }
     } finally {
       setLoading(false);
@@ -161,12 +157,6 @@ function Register({ email = "" }: RegisterProps) {
         >
           {loading ? "Registrando..." : "Registrar"}
         </button>
-
-        {error && (
-          <div className="alert alert-danger mt-2">
-            {error}
-          </div>
-        )}
       </form>
     </div>
   );

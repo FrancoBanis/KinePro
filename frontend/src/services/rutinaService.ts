@@ -89,12 +89,11 @@ export async function handleCrearRutina(payload : RutinaFormValues){
 export async function reprogramarRutina(idUsuario: number, idRutinaActual: number, idRutinaNueva: number): Promise<any> {
   const response = await axios.post(
     ENDPOINTS_RUTINA.REPROGRAMAR_RUTINA(idUsuario,idRutinaActual,idRutinaNueva),
-    {}, // Body vacío
+    {},
     {
       withCredentials: true 
     }
   );
-  alert("Reprogramación exitosa");
   return response.data;
 }
 export async function handleDesactivarRutina(rutinaId: number,  onSuccess?: () => void): Promise<void> {
@@ -146,8 +145,6 @@ export async function handleCancelarRutina (idRutina: number, idUsuario: number)
         method: "DELETE",
         credentials: "include",
       });
-    alert("Cancelacion exitosa");
-    window.location.reload();
     return;
 }
 

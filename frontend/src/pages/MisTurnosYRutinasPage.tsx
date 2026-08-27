@@ -10,8 +10,7 @@ export function MisTurnosPage() {
   const [turnos, setTurnos] = useState<TurnoData[]>([]);
   const [rutinas, setRutinas] = useState<RutinaData[]>([]);
 
-  useEffect(() => {
-    const cargarRutinasConTurnos = async () => {
+  const cargarRutinasConTurnos = async () => {
       if (!user?.id) return;
       try {
         const rutinasData = await getMisRutinas(user.id);
@@ -24,6 +23,14 @@ export function MisTurnosPage() {
         } catch(error) {
           console.error(error);
         }};
+    cargarRutinasConTurnos();
+  const handleCancelarRutina = () => {
+    cargarRutinasConTurnos();
+  }
+  const handleReprogramarRutina = () => {
+    cargarRutinasConTurnos();
+  }
+  useEffect(() => {
     cargarRutinasConTurnos();
   }, [user?.id]);
   const totalTurnos = rutinas.reduce((acc, r) => acc + r.turnos.length, 0);
@@ -43,7 +50,7 @@ export function MisTurnosPage() {
             return (
               <div className="col-12" key={rutina.id}>
                 <div className="border rounded p-3">
-                <Rutina rutinaRecibida={rutina} modo={'misTurnos'}/>
+                <Rutina rutinaRecibida={rutina} modo={'misTurnos'} onCancelarRutina={handleCancelarRutina} onReprogramarRutina={handleReprogramarRutina} />
                 <div className="row g-3 mt-2">
                 {rutina.turnos.map((turno) => {
                   return (

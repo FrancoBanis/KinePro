@@ -24,9 +24,11 @@ type Props = {
   modo?: 'publico' | 'misTurnos';
   accionAdicional?: React.ReactNode;
   onRutinaDesactivada?: () => void;
+  onCancelarRutina?: () => void;
+  onReprogramarRutina?: () => void;
 };
 
-export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, onEditar, accionAdicional, onRutinaDesactivada }: Props) {
+export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, onEditar, accionAdicional, onRutinaDesactivada, onCancelarRutina, onReprogramarRutina }: Props) {
   const [mostrarPopUp, setMostrarPopUp] = React.useState(false);
   const [costoTotal, setCostoTotal] = React.useState<number | null>(null);
   const [loadingTotal, setLoadingTotal] = React.useState(false);
@@ -65,7 +67,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
   }
     await handleDesactivarRutina(rutinaRecibida.id, () => {onRutinaDesactivada?.();});
   };
-  
+
   const enviarAviso = async (texto : String) => {
       await handleEnviarAviso(rutinaRecibida.id, texto);
     };
@@ -106,6 +108,8 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
       if (!user || !user.id) return;
       await handleCancelarRutina(rutinaRecibida.id, user.id);
       setEstaInscripto(false);
+      toast.success("¡Rutina cancelada con éxito!");
+      onCancelarRutina?.();
     } catch (err) {
       toast.error("Error al cancelar la rutina");
     } finally {
@@ -155,6 +159,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
               onCancelar={handleCancelar}
               onAgendar={abrirPopUp}
               onLogin={() => navigateWithState(ROUTES.INICIAR_SESION,{from: location.pathname, abrirItemId: rutinaRecibida.id, tipo:"rutina"})}             
+              onReprogramarRutina={onReprogramarRutina}
             />
             {accionAdicional}
           </div>
@@ -183,3 +188,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
     </>
   );
 }
+function aync() {
+  throw new Error("Function not implemented.");
+}
+

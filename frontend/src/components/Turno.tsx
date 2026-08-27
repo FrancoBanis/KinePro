@@ -5,7 +5,7 @@ import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/Merca
 import { useAuth } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLocationState } from "./hooks/useLocationState";
-import { getCostoTurno, getRutina, estaInscriptoEnTurno, cancelarTurno } from "../services/turnoService";
+import { getCostoTurno, getRutina } from "../services/turnoService";
 import "./Cards.css";
 import { BotonesUsuarioTurno } from "./BotonesUsuarioTurno";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
