@@ -2,6 +2,7 @@ import { type RutinaData } from "../constants/rutina";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 import "./Cards.css";
+import "./ModalConfirmarPago.css";
 import { useAuth } from "../context/AuthContext";
 import React, { useEffect } from "react";
 import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/MercadoPagoWallet";
@@ -16,6 +17,7 @@ import {handleDesactivarRutina,
 import { BotonesUsuarioRutina } from "./BotonesUsuarioRutina";
 import { toast } from "sonner";
 import { ROUTES } from "../constants/config";
+import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
 
 type Props = {
   rutinaRecibida: RutinaData;
@@ -197,25 +199,59 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
         </div>
       )}
 
-      {mostrarPopUp && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <h2><strong>Confirmar pago</strong></h2>
+     {mostrarPopUp && (
+  <div className="modal-overlay">
+    <div className="modal-card-pago">
+      <div className="modal-pago-body">
+
+        <div className="col-resumen">
+          <h2>Confirmar pago</h2>
+          <div className="detalles-pago">
             <p><strong>Rutina:</strong> {nombre}</p>
             <p><strong>Costo por turno:</strong> ${costoPorTurno}</p>
             <p><strong>Hora:</strong> {turnosActivos[0]?.hora}</p>
             {loadingTotal && <p>Cargando costo total...</p>}
             {errorTotal && <p>{errorTotal}</p>}
-            {costoTotal !== null && <p><strong>Costo Total:</strong> ${costoTotal}</p>}
-            <div className="modal-actions">
-              <button className="btn-log" onClick={() => setMostrarPopUp(false)}>
-                Cancelar
-              </button>
-              <MercadoPagoWallet itemId={rutinaRecibida.id} tipo="rutina" />
-            </div>
+            {costoTotal !== null && (
+              <p className="costo-total">
+                <strong>Costo Total:</strong> <span>${costoTotal}</span>
+              </p>
+            )}
+          </div>
+
+          <div className="modal-actions">
+            <button className="btn-log" onClick={() => setMostrarPopUp(false)}>
+              Cancelar
+            </button>
+            <MercadoPagoWallet itemId={rutinaRecibida.id} tipo="rutina" />
           </div>
         </div>
-      )}
+
+        <div className="col-turnos">
+          <h3>Turnos a asistir ({turnosActivos.length})</h3>
+          <div className="grilla-turnos-incluidos">
+            {turnosActivos.length > 0 ? (
+              turnosActivos.map((turno) => (
+                <div key={turno.id} className="tarjeta-mini-turno">
+                  <div className="mini-turno-header">
+                    <span>{formatearDiaEnEspanol(turno.dia)}</span>
+                  </div>
+                  <div className="mini-turno-body">
+                    <p className="fecha">{formatearFechaEnEspanol(turno.fecha)}</p>
+                    <p className="hora">{turno.hora} hs</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="sin-turnos">No hay turnos asignados a esta rutina.</p>
+            )}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }

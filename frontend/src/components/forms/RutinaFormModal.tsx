@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import FormModal from "../FormModal";
 import type { TipoRutinaData } from "../../constants/tipoRutina";
 import { toast } from "sonner";
+import { obtenerTiposRutina } from "../../services/tiposRutinaService";
+import { getProfesionales } from "../../services/turnoService";
 
 type Profesional = {
   id: number;
@@ -74,10 +76,7 @@ export default function RutinaFormModal({
       setLoadingTipos(true);
 
       try {
-        const response = await fetch("http://localhost:8080/tipos-rutina", {
-          credentials: "include",
-        });
-
+        const response = await obtenerTiposRutina()
         if (!response.ok) {
           toast.error("Error al cargar tipos");
         }
@@ -102,15 +101,7 @@ export default function RutinaFormModal({
       setLoadingProfesionales(true);
 
       try {
-        const response = await fetch("http://localhost:8080/api/auth/users/profesionales", {
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          toast.error("Error al cargar profesionales");
-        }
-
-        const data = await response.json();
+        const data = await getProfesionales();
         setProfesionalesDisponibles(data || []);
       } catch (error) {
         toast.error("Error al cargar profesionales: " + error);
