@@ -41,7 +41,8 @@ export const ENDPOINTS_COLA_TURNO = {
     RECIBIR_RESPUESTA_COLA: (turnoId: number, usuarioId: number) =>
         `${BACKEND_URL}/api/cola-espera/${turnoId}/usuario/${usuarioId}/recibir-respuesta`,
     ENVIAR_AVISO: (turnoId: number, usuarioId: number) =>
-        `${BACKEND_URL}/api/cola-espera/${turnoId}/usuario/${usuarioId}/enviar-aviso`
+        `${BACKEND_URL}/api/cola-espera/${turnoId}/usuario/${usuarioId}/enviar-aviso`,
+    ESTA_EN_COLA : (turnoId: number, usuarioId: number) => `${BACKEND_URL}/api/cola-espera/${turnoId}/usuario/${usuarioId}`,
 }
 export const ENDPOINTS_RUTINA = {
     RUTINAS_ACTIVAS: `${BACKEND_URL}/rutinas/activa/true`,

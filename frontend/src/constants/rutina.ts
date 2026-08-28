@@ -13,7 +13,7 @@ export interface RutinaData {
   diaSemana : string;
   activa: boolean;
   costoPorTurno: number;
-  capacidadMaxima: number;
+  cupoMaxPacientesPorTurno: number;
   cupoMaxRutina: number;
   cantidadPacientesRutina: number;
   turnos: TurnoData[];

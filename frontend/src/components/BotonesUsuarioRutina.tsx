@@ -49,7 +49,6 @@ export function BotonesUsuarioRutina({
     const [loadingSimilares, setLoadingSimilares] = React.useState(false);
     const [errorSimilares, setErrorSimilares] = React.useState<string | null>(null);
     const [loadingReprogramar, setLoadingReprogramar] = React.useState(false);
-    const [errorReprogramar, setErrorReprogramar] = React.useState<string | null>(null);
     const [errorCancelarRutina, setErrorCancelarRutina] = React.useState<string | null>(null);
     const [loadingConfirmacionRutina, setLoadingConfirmacionRutina] = React.useState(false);
     const [mostrarModalConfirmacionCancelacionRutina, setMostrarModalConfirmacionCancelacionRutina] = React.useState(false);
@@ -59,7 +58,6 @@ export function BotonesUsuarioRutina({
         setMostrarPopUpReprogramar(true);
         setLoadingSimilares(true);
         setErrorSimilares(null);
-        setErrorReprogramar(null);
         try {
             const data = await getRutinasSimilares(id, user.id);
             setRutinasSimilares(data || []);
@@ -72,14 +70,12 @@ export function BotonesUsuarioRutina({
     const handleReprogramar = async (rutinaNuevaId: number) => {
         if (!user?.id) return;
         setLoadingReprogramar(true);
-        setErrorReprogramar(null);
         try {
             await reprogramarRutina(user.id, id, rutinaNuevaId);
             toast.success("¡Rutina reprogramada con éxito!");
             setMostrarPopUpReprogramar(false);
             onReprogramarRutina?.();
         } catch (err: any) {
-            setErrorReprogramar(err?.message || "Ocurrió un error al reprogramar.");
             toast.error("Error al reprogramar la rutina:" + err?.meesage);
         } finally {
             setLoadingReprogramar(false);
@@ -95,7 +91,7 @@ const modalReprogramar = mostrarPopUpReprogramar && createPortal(
                 <p><span className="button-spinner" aria-hidden="true" /> Buscando opciones similares...</p>
             )}
             {!loadingSimilares && errorSimilares && <p>{errorSimilares}</p>}
-            {errorReprogramar && <p style={{ color: "red", fontWeight: "bold" }}>{errorReprogramar}</p>}
+
             
             {!loadingSimilares && !errorSimilares && rutinasSimilares.length === 0 && (
                 <p>No se encontraron rutinas similares disponibles con turnos libres.</p>
@@ -115,7 +111,7 @@ const modalReprogramar = mostrarPopUpReprogramar && createPortal(
                                 <p><strong>Tipo:</strong> <span>{rutinaSimilar.tipo?.nombre}</span></p>
                                 <p><strong>Fin:</strong> <span>{rutinaSimilar.fechaDeFin}</span></p>
                                 <p><strong>Costo:</strong> <span>${rutinaSimilar.costoPorTurno}</span></p>
-                                <p><strong>Cupo max:</strong> <span>{rutinaSimilar.capacidadMaxima}</span></p>
+                                <p><strong>Cupo max:</strong> <span>{rutinaSimilar.cupoMaxRutina}</span></p>
                             </div>
 
                             <button
@@ -269,9 +265,9 @@ if (modo === 'misTurnos') {
         if (estaInscripto) {
             return <button className="btn-log" disabled>Ya inscripto</button>
         }
-    if (rutinaLlena) {
-        return <button className="btn-log" disabled>Rutina llena</button>
-    }
+        if (rutinaLlena) {
+           return <button className="btn-log" disabled>Rutina llena</button>
+          }
         if (!usuarioLogueado) {
              return <button className='btn-log' onClick={onLogin}>Agendar rutina</button>
         }

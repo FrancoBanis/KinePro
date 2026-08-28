@@ -132,7 +132,7 @@ export function RutinasPage() {
               horaInicio : rutinaEnEdicion.horaInicio,
               horaFin : rutinaEnEdicion.horaFin,
               costoPorTurno: rutinaEnEdicion.costoPorTurno,
-              cupoMaxPacientesPorTurno: rutinaEnEdicion.capacidadMaxima,
+              cupoMaxPacientesPorTurno: rutinaEnEdicion.cupoMaxRutina,
               cupoMaxRutina: rutinaEnEdicion.cupoMaxRutina,
           }
         : undefined;

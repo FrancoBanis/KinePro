@@ -76,13 +76,13 @@ export function Turno({ turnoRecibido, modo = "publico", onCancelarTurno, onRepr
       <div className={`card card-turno${inactivo ? ' card-turno--inactive' : ''}`}>
         <div className="card-info">
           {modo === "publico" && (
-          <h3>Turno correspondiente a la rutina: {rutina?.nombre}</h3>)
+          <h4 className="mtr-rutina-titulo">Turno correspondiente a la rutina: <strong>{rutina?.nombre}</strong></h4>)
           }
-          <p>Día: {formatearDiaEnEspanol(turnoRecibido.dia)}</p>
-          <p>Fecha: {formatearFechaEnEspanol(turnoRecibido.fecha)}</p>
-          <p>Hora: {turnoRecibido.hora}</p>
+          <p><strong>Día:</strong> {formatearDiaEnEspanol(turnoRecibido.dia)}</p>
+          <p><strong>Fecha:</strong> {formatearFechaEnEspanol(turnoRecibido.fecha)}</p>
+          <p><strong>Hora:</strong> {turnoRecibido.hora}</p>
           {modo == "publico" && (
-          <p>Pacientes inscriptos: {cantidadPacientes} / {turnoRecibido.cupoMaxPacientes}</p>)
+          <p><strong>Pacientes inscriptos:</strong> {cantidadPacientes} / {turnoRecibido.cupoMaxPacientes}</p>)
           }
           {turnoRecibido.profesionales && turnoRecibido.profesionales.length > 0 && (
             <div className="mtr-profesionales">
@@ -118,14 +118,14 @@ export function Turno({ turnoRecibido, modo = "publico", onCancelarTurno, onRepr
         <div className="modal-overlay">
           <div className="modal-card">
             <h2>Confirmar pago</h2>
-            <p>Turno correspondiente a la rutina: {rutina?.nombre}</p>
-            <p>Costo por turno: ${costo}</p>
-            <p>Día: {formatearDiaEnEspanol(turnoRecibido.dia)}</p>
-            <p>Fecha: {formatearFechaEnEspanol(turnoRecibido.fecha)}</p>
-            <p>Hora: {turnoRecibido.hora}</p>
+            <p><strong>Turno correspondiente a la rutina:</strong> {rutina?.nombre}</p>
+            <p><strong>Costo por turno:</strong> ${costo}</p>
+            <p><strong>Día:</strong> {formatearDiaEnEspanol(turnoRecibido.dia)}</p>
+            <p><strong>Fecha:</strong> {formatearFechaEnEspanol(turnoRecibido.fecha)}</p>
+            <p><strong>Hora:</strong> {turnoRecibido.hora}</p>
             {loadingTotal && <p><span className="button-spinner" aria-hidden="true" /> Cargando costo total...</p>}
             {errorTotal && <p>{errorTotal}</p>}
-            {costo !== null && <p>Costo Total: ${costo}</p>}
+            {costo !== null && <p><strong>Costo Total:</strong> ${costo}</p>}
             <div className="modal-actions">
               <button className="btn-log" onClick={() => setMostrarPopUp(false)}>
                 Cancelar

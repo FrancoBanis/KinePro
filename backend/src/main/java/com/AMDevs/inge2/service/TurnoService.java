@@ -135,12 +135,17 @@ public class TurnoService {
                 "Reeembolso del 100%");
         }
     }
-    public void eliminarUsuarioDeTurno(Long usuarioId, Long turnoId) {
+        public void eliminarUsuarioDeTurno(Long usuarioId, Long turnoId) {
         Usuario usuario = usuarioService.buscarPorId(usuarioId);
-        Turno turno =  buscarPorId(turnoId);
+        Turno turno = buscarPorId(turnoId);
         turno.quitarPaciente(usuario);
         turnoRepository.save(turno);
-        colaEsperaService.intentarAvisarAlSiguiente(turnoId);
+    
+        try {
+            colaEsperaService.intentarAvisarAlSiguiente(turnoId);
+        } catch (Exception e) {
+            System.err.println("No se pudo avisar al siguiente en cola: " + e.getMessage());
+        }
     }
     public boolean seEncuentra(Long usuarioId, Long turnoId) {
         Turno turno = buscarPorId(turnoId);

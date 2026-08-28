@@ -9,15 +9,12 @@ const pageContent = {
     description: "Consulta la disponibilidad actual y agenda tu proximo turno en pocos pasos.",
 };
 
-export function TurnosPage() {
+    export function TurnosPage() {
     const [turnos, setTurnos] = useState<TurnoData[]>([]);
     const [errorTurno, setErrorTurno] = useState<string | null>(null);
     const [loadingTurnos, setLoadingTurnos] = useState(true);
-
-    
-    useEffect(() => {
-        let ignore = false;
-        const cargarTurnos = async () => {
+    const cargarTurnos = async () => {
+            let ignore = false;
             setLoadingTurnos(true);
             setErrorTurno(null);
             try {
@@ -28,11 +25,10 @@ export function TurnosPage() {
             } finally {
             if (!ignore) setLoadingTurnos(false);
         }
-    };
-    cargarTurnos();
-    return () => {ignore = true;}    
-    }, []    
-    );
+    }
+    useEffect(() => {
+        cargarTurnos();    
+    }, [] );
 
 
     const renderSkeletons = () => (

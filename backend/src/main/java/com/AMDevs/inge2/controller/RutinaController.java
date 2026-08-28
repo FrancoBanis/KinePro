@@ -52,7 +52,7 @@ public class RutinaController {
     public ResponseEntity<?> contarRutinas(@RequestParam Long id, @RequestParam Long idUsuario) {
         try {
             Rutina rutina = rutinaService.buscarRutina(id);
-            return ResponseEntity.ok(rutinaService.contarTurnos(rutina, idUsuario));
+            return ResponseEntity.ok(rutinaService.rutinaHabilitada(rutina));
         } catch (Exception e) {
           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al contar las rutinas:  "+ e.getMessage());

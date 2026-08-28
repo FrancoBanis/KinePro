@@ -115,14 +115,12 @@ public class RutinaServiceImpl implements RutinaService {
     @Override
     public Long contarTurnos(Rutina rutina,Long idUsuario) {
         return rutina.getTurnos().stream()
-                .filter(t -> !turnoService.seEncuentra(idUsuario, t.getId()))
-                .filter(t -> {
-                    Integer actuales = t.getCantidadDePacientesActuales();
-                    Integer cupo = t.getCupoMaxPacientes();
-                    return actuales != null && cupo != null && actuales < cupo;
-                })
-                .count();
+                .filter(t -> !turnoService.seEncuentra(idUsuario, t.getId())).count();
 
+    }
+    @Override
+    public boolean rutinaHabilitada (Rutina rutina) {
+        return rutina.getCupoMaxRutina() >= rutina.getCantidadPacientesRutina();
     }
     public List<Rutina> getRutinasSimilares (Long id, Long idUsuario) {
         Rutina rutina = buscarRutina(id);

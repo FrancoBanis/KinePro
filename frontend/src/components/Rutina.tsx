@@ -52,10 +52,8 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
   } = rutinaRecibida;
 
   const turnosActivos = (turnos || []).filter((t: any) => t.activa);
-  const rutinaLlena = (cantidadPacientesRutina ?? 0) >= (cupoMaxRutina ?? Infinity)
-    || (turnosActivos.length > 0 && turnosActivos.every(
-      (turnoItem) => turnoItem.cantidadDePacientesActuales >= turnoItem.cupoMaxPacientes
-    ));
+  const rutinaLlena = (cantidadPacientesRutina ?? 0) >= (cupoMaxRutina)
+;
   const tienePacientes = (turnos || []).some(
     (turnoItem) => (turnoItem.pacientes?.length ?? turnoItem.cantidadDePacientesActuales ?? 0) > 0
   );
@@ -151,7 +149,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
             <span><strong>Tipo:</strong> {tipo.nombre}</span>
             <span><strong>Del</strong> {fechaDeInicio} <strong>al</strong> {fechaDeFin}</span>
             <span><strong>Costo/turno:</strong> ${costoPorTurno}</span>
-            <span><strong>Cupo:</strong> {cantidadPacientesRutina ?? 0}/{cupoMaxRutina}</span>
+            <span><strong>Cupo de la rutina:</strong> {cantidadPacientesRutina ?? 0}/{cupoMaxRutina}</span>
           </div>
           <div className="mtr-rutina-acciones">
             {puedeEditar && (
@@ -172,13 +170,13 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
       ) : (
         <div className="card card-rutina">
           <div className="card-info">
-            <h3>{nombre}</h3>
-            <p>Profesionales: {nombresDeProfesionales}</p>
-            <p>Tipo de Rutina: {tipo.nombre}</p>
-            <p>Fecha de Inicio: {fechaDeInicio}</p>
-            <p>Fecha de Fin: {fechaDeFin}</p>
-            <p>Costo por Turno: {costoPorTurno}</p>
-            <p>Cupo: {cantidadPacientesRutina ?? 0}/{cupoMaxRutina}</p>
+            <h3 className="mtr-rutina-titulo">{nombre}</h3>
+            <p><strong>Profesionales:</strong> {nombresDeProfesionales}</p>
+            <p><strong>Tipo de Rutina:</strong> {tipo.nombre}</p>
+            <p><strong>Fecha de Inicio:</strong> {fechaDeInicio}</p>
+            <p><strong>Fecha de Fin:</strong> {fechaDeFin}</p>
+            <p><strong>Costo por Turno:</strong> {costoPorTurno}</p>
+            <p><strong>Cupo de la rutina:</strong>{cantidadPacientesRutina ?? 0}/{cupoMaxRutina}</p>
 
             <div className="card-actions">
               {puedeEditar && (
@@ -202,13 +200,13 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
       {mostrarPopUp && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <h2>Confirmar pago</h2>
-            <p>Rutina: {nombre}</p>
-            <p>Costo por turno: ${costoPorTurno}</p>
-            <p>Hora: {turnosActivos[0]?.hora}</p>
+            <h2><strong>Confirmar pago</strong></h2>
+            <p><strong>Rutina:</strong> {nombre}</p>
+            <p><strong>Costo por turno:</strong> ${costoPorTurno}</p>
+            <p><strong>Hora:</strong> {turnosActivos[0]?.hora}</p>
             {loadingTotal && <p>Cargando costo total...</p>}
             {errorTotal && <p>{errorTotal}</p>}
-            {costoTotal !== null && <p>Costo Total: ${costoTotal}</p>}
+            {costoTotal !== null && <p><strong>Costo Total:</strong> ${costoTotal}</p>}
             <div className="modal-actions">
               <button className="btn-log" onClick={() => setMostrarPopUp(false)}>
                 Cancelar

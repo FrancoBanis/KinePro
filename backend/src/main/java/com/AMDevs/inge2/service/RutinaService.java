@@ -10,6 +10,7 @@ import java.util.List;
 public interface RutinaService {
     List<Rutina> getRutinas();
     List<Rutina> getMisRutinas(Long idUsuario);
+    boolean rutinaHabilitada (Rutina rutina);
     List<Turno> getTurnosDeMisRutinas (Long idUsuario , Long idRutina); 
     List<Rutina> getRutinasSimilares (Long id, Long idUsuario);
     Rutina crearRutina(RutinaRequestDTO request);

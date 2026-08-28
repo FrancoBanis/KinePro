@@ -20,12 +20,10 @@ function VerEmpleados() {
   const [employees, setEmployees] = useState<UsuarioData[]>([])
   const [employeesLoading, setEmployeesLoading] = useState(true)
   const [employeesError, setEmployeesError] = useState<string | null>(null)
-  const [pageSuccess, setPageSuccess] = useState<string | null>(null)
   const [employeeActionId, setEmployeeActionId] = useState<number | null>(null)
 
   const [selectedUser, setSelectedUser] = useState<UsuarioData | null>(null)
   const [editForm, setEditForm] = useState<Partial<UsuarioData>>({})
-  const [editError, setEditError] = useState<string | null>(null)
   const [editLoading, setEditLoading] = useState(false)
 
   const [selectedRoleUser, setSelectedRoleUser] = useState<UsuarioData | null>(null)
@@ -66,21 +64,17 @@ function VerEmpleados() {
   const openEmployeeEditor = (employee: UsuarioData) => {
     setSelectedUser(employee)
     setEditForm({ ...employee })
-    setEditError(null)
-    setPageSuccess(null)
   }
 
   const closeEmployeeEditor = () => {
     setSelectedUser(null)
     setEditForm({})
-    setEditError(null)
   }
 
   const openRoleEditor = (employee: UsuarioData) => {
     setSelectedRoleUser(employee)
     setRoleValue(String(employee.rol))
     setRoleError(null)
-    setPageSuccess(null)
   }
 
   const closeRoleEditor = () => {
@@ -91,7 +85,6 @@ function VerEmpleados() {
 
   const handleEditSubmit = async () => {
     if (!selectedUser) return
-    setEditError(null)
     setEditLoading(true)
     try {
       await axios.put(
@@ -107,14 +100,10 @@ function VerEmpleados() {
         { withCredentials: true }
       )
       closeEmployeeEditor()
-      setPageSuccess('Datos actualizados correctamente.')
+      toast.success('Datos actualizados correctamente.')
       await loadEmployees()
     } catch (error: unknown) {
-      setEditError(
-        axios.isAxiosError(error) && error.response
-          ? error.response.data?.message || 'Error al guardar cambios.'
-          : 'Error al conectar con el servidor.'
-      )
+      toast.error(`Error al guardar cambios: ${axios.isAxiosError(error) && error.response?.data?.message ? error.response.data.message : 'Error al conectar con el servidor.'}`)
     } finally {
       setEditLoading(false)
     }
@@ -131,13 +120,13 @@ function VerEmpleados() {
         { withCredentials: true }
       )
       closeRoleEditor()
-      setPageSuccess('Rol actualizado correctamente.')
+      toast.success('Rol actualizado correctamente.')
       await loadEmployees()
     } catch (error: unknown) {
       setRoleError(
         axios.isAxiosError(error) && error.response
           ? error.response.data?.message || 'Error al modificar el rol.'
-          : 'Error al conectar con el servidor.'
+          : toast.error('Error al conectar con el servidor.')
       )
     } finally {
       setRoleLoading(false)
@@ -149,7 +138,6 @@ function VerEmpleados() {
 
     setEmployeeActionId(employee.id)
     setEmployeesError(null)
-    setPageSuccess(null)
     try {
       await axios.patch(
         `http://localhost:8080/api/auth/users/${employee.id}/desactivar`,
@@ -180,7 +168,6 @@ function VerEmpleados() {
         )}
       </div>
 
-      {pageSuccess && <div className="alert-success employees-feedback">{pageSuccess}</div>}
       {employeesLoading && <p className="employees-status">Cargando empleados...</p>}
       {employeesError && <div className="alert-danger employees-feedback">{employeesError}</div>}
       {!employeesLoading && !employeesError && employees.length === 0 && (
@@ -296,7 +283,6 @@ function VerEmpleados() {
             max={limitesFechaNacimiento.max}
           />
         </div>
-        {editError && <div className="alert-danger mt-2">{editError}</div>}
       </FormModal>
 
       <FormModal
