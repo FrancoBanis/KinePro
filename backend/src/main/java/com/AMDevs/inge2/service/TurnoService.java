@@ -44,14 +44,14 @@ public class TurnoService {
         
         List<Turno> turnosSimilares = new ArrayList<>();
         getTurnosActivos().forEach(t -> {
-            if (turnoHabilitado(rutinaDeTurno.getCostoPorTurno(), turno, t) && !seEncuentra(idUsuario, t.getId())) {
+            if (turnoHabilitado(rutinaDeTurno.getCostoPorTurno(), t) && !seEncuentra(idUsuario, t.getId())) {
                 turnosSimilares.add(t);
             }
         });
         return turnosSimilares;
     }
-    public boolean turnoHabilitado(double precio, Turno turno, Turno request) {
-        return ((precio == costo(request.getId())) && (turno.getCantidadDePacientesActuales() < turno.getCupoMaxPacientes())); 
+    public boolean turnoHabilitado(double precio, Turno request) {
+        return ((precio == costo(request.getId())) && (request.getCantidadDePacientesActuales() < request.getCupoMaxPacientes())); 
     }
     public Turno crearTurno(Turno turno) {
         return turnoRepository.save(turno);

@@ -1,0 +1,134 @@
+/* ===== Contenedor de cada grupo Rutina + sus Turnos ===== */
+.mtr-grupo {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* ===== Header compacto de la rutina (reemplaza la card grande) ===== */
+.mtr-rutina-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  padding: 14px 20px;
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-primary-soft);
+}
+
+.mtr-rutina-titulo {
+  margin: 0;
+  font-size: 18px;
+  color: var(--color-text);
+  flex: 0 0 auto;
+  min-width: 140px;
+}
+
+.mtr-rutina-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  flex: 1 1 auto;
+}
+
+.mtr-rutina-info span {
+  font-size: 13px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.mtr-rutina-info strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.mtr-rutina-acciones {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+}
+
+/* Achicamos los botones cuando están dentro del header compacto */
+.mtr-rutina-acciones .btn-log,
+.mtr-rutina-acciones .btn-secondary {
+  padding: 6px 12px;
+  font-size: 13px;
+  box-shadow: none;
+}
+
+/* ===== Grid de turnos anidados, compacto ===== */
+.mtr-turnos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
+  padding: 14px 20px 18px;
+}
+
+/* Sobreescribimos la card genérica sólo dentro de este contexto */
+.mtr-turnos-grid .card {
+  padding: 14px;
+  min-height: auto;
+  border-top-width: 3px;
+}
+
+.mtr-turnos-grid .card h3 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.mtr-turnos-grid .card p {
+  font-size: 13px;
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+.mtr-turnos-grid .card-actions {
+  gap: 14px; /* Cambia de 8px a 14px u otro valor mayor */
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.mtr-turnos-grid .card-actions .btn-log,
+.mtr-turnos-grid .card-actions .btn-secondary {
+  padding: 6px 10px;
+  font-size: 12.5px;
+  box-shadow: none;
+}
+
+/* Chip de profesionales dentro de la card de turno */
+.mtr-profesionales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 6px 0 2px;
+}
+
+.mtr-profesional-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .mtr-rutina-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mtr-rutina-acciones {
+    width: 100%;
+  }
+
+  .mtr-turnos-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -86,55 +86,58 @@ export function BotonesUsuarioRutina({
         }
     };
 const modalReprogramar = mostrarPopUpReprogramar && createPortal(
-            <div className="modal-overlay">
-              <div className="modal-card">
-                <h2>Rutinas similares disponibles</h2>
-                <p>Elegí una rutina similar para reprogramar tu inscripción completa.</p>
-                
-                {loadingSimilares && (
-                  <p><span className="button-spinner" aria-hidden="true" /> Buscando opciones similares...</p>
-                )}
-                {!loadingSimilares && errorSimilares && <p>{errorSimilares}</p>}
-                {errorReprogramar && <p style={{ color: "red", fontWeight: "bold" }}>{errorReprogramar}</p>}
-                
-                {!loadingSimilares && !errorSimilares && rutinasSimilares.length === 0 && (
-                  <p>No se encontraron rutinas similares disponibles con turnos libres.</p>
-                )}
-    
-                {!loadingSimilares && !errorSimilares && rutinasSimilares.length > 0 && (
-                <section className="activity-section" aria-labelledby="turnos-title">
-                    {rutinasSimilares.map((rutinaSimilar) => (
-                    <div className="card card-turno" key={rutinaSimilar.id} >
-                        <div className="card-info">
-                        <h3>{rutinaSimilar.nombre}</h3>
-                        <p>Profesionales: {rutinaSimilar.nombresDeProfesionales}</p>
-                        <p>Tipo de Rutina: {rutinaSimilar.tipo?.nombre}</p>
-                        <p>Fecha de Inicio: {rutinaSimilar.fechaDeInicio}</p>
-                        <p>Fecha de Fin: {rutinaSimilar.fechaDeFin}</p>
-                        <p>Costo por Turno: ${rutinaSimilar.costoPorTurno}</p>
-                        <p>Capacidad Máxima: {rutinaSimilar.capacidadMaxima}</p>
+    <div className="modal-overlay">
+        <div className="modal-card modal-reprogramar-container">
+            <h2>Rutinas similares disponibles</h2>
+            <p>Elegí una rutina similar para reprogramar tu inscripción completa.</p>
+            
+            {loadingSimilares && (
+                <p><span className="button-spinner" aria-hidden="true" /> Buscando opciones similares...</p>
+            )}
+            {!loadingSimilares && errorSimilares && <p>{errorSimilares}</p>}
+            {errorReprogramar && <p style={{ color: "red", fontWeight: "bold" }}>{errorReprogramar}</p>}
+            
+            {!loadingSimilares && !errorSimilares && rutinasSimilares.length === 0 && (
+                <p>No se encontraron rutinas similares disponibles con turnos libres.</p>
+            )}
 
-                        <button
-                          className="btn-log"
-                          onClick={() => handleReprogramar(rutinaSimilar.id)}
-                          disabled={loadingReprogramar}
-                        >
-                          {loadingReprogramar ? "Procesando..." : "Elegir esta rutina"}
-                        </button>
+            {!loadingSimilares && !errorSimilares && rutinasSimilares.length > 0 && (
+                <div className="grilla-opciones">
+                    {rutinasSimilares.map((rutinaSimilar) => (
+                        <div className="tarjeta-opcion" key={rutinaSimilar.id}>
+                            <div className="tarjeta-header">
+                                <h3 className="tarjeta-titulo">{rutinaSimilar.nombre}</h3>
+                                <div className="tarjeta-subtitulo">Inicio: {rutinaSimilar.fechaDeInicio}</div>
+                            </div>
+                            
+                            <div className="tarjeta-info">
+                                <p><strong>Profesionales:</strong> <span>{rutinaSimilar.nombresDeProfesionales}</span></p>
+                                <p><strong>Tipo:</strong> <span>{rutinaSimilar.tipo?.nombre}</span></p>
+                                <p><strong>Fin:</strong> <span>{rutinaSimilar.fechaDeFin}</span></p>
+                                <p><strong>Costo:</strong> <span>${rutinaSimilar.costoPorTurno}</span></p>
+                                <p><strong>Cupo max:</strong> <span>{rutinaSimilar.capacidadMaxima}</span></p>
+                            </div>
+
+                            <button
+                                className="btn-elegir-tarjeta"
+                                onClick={() => handleReprogramar(rutinaSimilar.id)}
+                                disabled={loadingReprogramar}
+                            >
+                                {loadingReprogramar ? "Procesando..." : "Elegir esta rutina"}
+                            </button>
                         </div>
-                    </div>
                     ))}
-                  </section>
-                )}
-                <div className="modal-actions">
-                  <button className="btn-log" onClick={() => setMostrarPopUpReprogramar(false)} disabled={loadingReprogramar}>
-                    Cerrar
-                  </button>
                 </div>
-              </div>
-            </div>,
-          document.body
-        );
+            )}
+            <div className="modal-actions">
+                <button className="btn-log" onClick={() => setMostrarPopUpReprogramar(false)} disabled={loadingReprogramar}>
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>,
+    document.body
+);
     const handleIniciarCancelacionRutina = async () => {
         if (!user?.id) return;
         const turnosDeLaRutina = turnos ?? [];
@@ -242,24 +245,27 @@ const modalReprogramar = mostrarPopUpReprogramar && createPortal(
 
         fetchCantidad();
     }, [id, user?.id]);
-        if (modo === 'misTurnos') {
-        if (!estaInscripto) {
-            return null;
-        }
-        return (
-        <>
-          <button className="btn-log" onClick={handleIniciarCancelacionRutina} disabled={loadingConfirmacionRutina}>
-          {loadingConfirmacionRutina ? "Calculando reembolso..." : loadingInscripcion ? "Cancelando..." : "Cancelar rutina"}
+if (modo === 'misTurnos') {
+    if (!estaInscripto) {
+        return null;
+    }
+    return (
+    <>
+      <div className="acciones-usuario-container">
+          <button className="btn-accion-azul btn-accion-outline" onClick={handleIniciarCancelacionRutina} disabled={loadingConfirmacionRutina}>
+            {loadingConfirmacionRutina ? "Calculando..." : loadingInscripcion ? "Cancelando..." : "Cancelar rutina"}
           </button>
-          {errorCancelarRutina && <p style={{ color: 'red' }}>{errorCancelarRutina}</p>}
-          <button className="btn-og" onClick={abrirPopUpReprogramar}>
+          
+          <button className="btn-accion-azul" onClick={abrirPopUpReprogramar}>
             Reprogramar rutina
           </button>
-          {modalReprogramar}
-          {modalConfirmacionCancelacionRutina}
-          </>
-        )
-        };
+      </div>
+      {errorCancelarRutina && <p style={{ color: 'red', marginTop: '4px' }}>{errorCancelarRutina}</p>}
+      {modalReprogramar}
+      {modalConfirmacionCancelacionRutina}
+    </>
+    )
+};
         if (estaInscripto) {
             return <button className="btn-log" disabled>Ya inscripto</button>
         }

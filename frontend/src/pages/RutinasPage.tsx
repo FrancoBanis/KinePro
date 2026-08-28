@@ -34,7 +34,7 @@ export function RutinasPage() {
     // Estado dinámico para saber en qué rutinas ya está anotado en cola el usuario
     const [colasEspera, setColasEspera] = useState<Record<number, boolean>>({});
     
-    const cargarRutinas = async (ignore = false) => {
+    const actualizarRutinas = async (ignore = false) => {
         setLoadingRutinas(true);
         setErrorRutina(null);
 
@@ -54,9 +54,6 @@ export function RutinasPage() {
         } finally {
             if (!ignore) setLoadingRutinas(false);
         }
-    };
-    const handleDesactivarRutina = () => {
-        cargarRutinas();
     };
     // Función para verificar si el usuario logueado ya está en la cola de las rutinas llenas
     const verificarColasEspera = async (rutinasCargadas: RutinaData[]) => {
@@ -99,7 +96,7 @@ export function RutinasPage() {
 
     useEffect(() => {
         let ignore = false;
-        cargarRutinas(ignore);
+        actualizarRutinas(ignore);
         return () => {
             ignore = true;
         };
@@ -183,7 +180,7 @@ export function RutinasPage() {
                 await handleCrearRutina(payload);
                 setOpenForm(false);
                 setRutinaEnEdicion(null);
-                await cargarRutinas();
+                await actualizarRutinas();
                 toast.success("Rutina creada exitosamente");
             } catch (error) {
                 toast.error("Error al guardar la rutina");
@@ -197,7 +194,7 @@ export function RutinasPage() {
             const result = await handleModificarRutina(rutinaEnEdicion.id, payload);
             setOpenForm(false);
             setRutinaEnEdicion(null);
-            await cargarRutinas();
+            await actualizarRutinas();
             toast.success(result.message);
         } catch (error) {
             const msg = error instanceof Error ? error.message : "Error desconocido";
@@ -300,8 +297,10 @@ export function RutinasPage() {
                                     puedeEditar={puedeEditarRutinas}
                                     onEditar={() => abrirEditarRutina(rutina)}
                                     accionAdicional={accionCola}
-                                    onRutinaDesactivada={handleDesactivarRutina}
-                                />
+                                    onRutinaDesactivada={actualizarRutinas}
+                                    onCancelarRutina={actualizarRutinas}
+                                    onReprogramarRutina={actualizarRutinas}
+                                />  
                             );
                         })}
                     </div>

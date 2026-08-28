@@ -10,10 +10,15 @@ import "./Cards.css";
 import { BotonesUsuarioTurno } from "./BotonesUsuarioTurno";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
 import { ROUTES } from "../constants/config";
+type Props = {
+  turnoRecibido: TurnoData;
+  modo?: "publico" | "misTurnos";
+  onCancelarTurno?: () => void;
+  onReprogramarTurno?: () => void;
+};
 
 
-
-export function Turno({ turnoRecibido, modo = "publico" }: { turnoRecibido: TurnoData; modo? : "publico" | "misTurnos"})   {
+export function Turno({ turnoRecibido, modo = "publico", onCancelarTurno, onReprogramarTurno }: Props) {
     const location = useLocation();
     const navigate = useNavigate();
   
@@ -44,22 +49,26 @@ export function Turno({ turnoRecibido, modo = "publico" }: { turnoRecibido: Turn
   }, [turnoRecibido.id]);
 
   // Busco informacion de la rutina del turno.
-  useEffect(() => {
+  const actualizarTurno = async () => {
     if (!turnoRecibido.id_rutina) return;
-    getRutina(turnoRecibido.id_rutina)
-    .then(setRutina)
-    .catch(err => console.error("Error al cargar rutina: ", err));
-    }, [turnoRecibido.id]
+    try {
+      const data = await getRutina(turnoRecibido.id_rutina);
+      setRutina(data);
+    } catch (err) {
+      console.error("Error al cargar rutina: ", err);
+    }
+  };
+
+  useEffect(() => {
+    actualizarTurno();
+  }, []
   );
-
-
   useEffect(() => {
     if (user && typedState && typedState.abrirItemId === turnoRecibido.id && typedState.tipo === "turno") {
       navigate(location.pathname, { replace: true, state: {} });
       abrirPopUp();
     }
   }, [user, typedState, turnoRecibido.id]);
-
 
 
   return (
@@ -75,6 +84,15 @@ export function Turno({ turnoRecibido, modo = "publico" }: { turnoRecibido: Turn
           {modo == "publico" && (
           <p>Pacientes inscriptos: {cantidadPacientes} / {turnoRecibido.cupoMaxPacientes}</p>)
           }
+          {turnoRecibido.profesionales && turnoRecibido.profesionales.length > 0 && (
+            <div className="mtr-profesionales">
+              {turnoRecibido.profesionales.map((prof) => (
+                <span className="mtr-profesional-chip" key={prof.id}>
+                  {prof.nombre} {prof.apellido}
+                </span>
+              ))}
+            </div>
+          )}
           
           <BotonesUsuarioTurno
             modo={modo}
@@ -83,6 +101,14 @@ export function Turno({ turnoRecibido, modo = "publico" }: { turnoRecibido: Turn
             usuarioLogueado={!!user}
             onAgendar={abrirPopUp}
             onLogin={() => navigateWithState(ROUTES.INICIAR_SESION,{from: location.pathname, abrirItemId: turnoRecibido.id, tipo:"turno"})}
+            onCancelar={() => {
+              actualizarTurno();
+              onCancelarTurno?.();
+            }}
+            onReprogramar={() => {
+              actualizarTurno();
+              onReprogramarTurno?.();
+            }}  
           />
           
         </div>

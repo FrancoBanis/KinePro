@@ -8,7 +8,7 @@ import { PagoFallido } from './pages/PagoFallidoPage'
 import { EditarDatosPage } from './pages/EditarMisDatos'
 import { RutinasPage } from './pages/RutinasPage'
 import { TurnosPage } from './pages/TurnosPage'
-import { MisTurnosPage } from './pages/MisTurnosYRutinasPage'
+import {MisTurnosYRutinasPage} from './pages/MisTurnosYRutinasPage'
 import { ActividadesPage } from './pages/ActividadesPage'
 import TipoRutinasPage from './pages/TiposDeRutinasPage'
 import AdministrarUsuarios from './pages/AdministrarUsuarios'
@@ -33,7 +33,7 @@ export default function  AppRoutes() {
       <Route path={ROUTES.REGISTRO} element={<RegisterRoute />} />
       <Route path={ROUTES.INICIAR_SESION} element={<LoginPage />} />
       <Route path={ROUTES.PANEL_USUARIO} element={<EditarDatosPage />} />
-      <Route path={ROUTES.MIS_TURNOS} element={<MisTurnosPage />} />
+      <Route path={ROUTES.MIS_TURNOS} element={<MisTurnosYRutinasPage />} />
       <Route path={ROUTES.VALIDAR_TOKEN} element={<ValidarToken />} />
       <Route path={ROUTES.RUTINAS} element={<RutinasPage />} />
       <Route path={ROUTES.TURNOS} element={<TurnosPage />} />

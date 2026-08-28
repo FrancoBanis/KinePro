@@ -78,7 +78,6 @@ export async function cancelarTurno (usuarioId: number, turnoId: number) : Promi
         credentials: "include",
     });
     if (!response.ok) throw new Error("Error al cancelar el turno");
-    window.location.reload();
     return;
 }
 export async function reprogramarTurno(usuarioId:number, turnoActId: number, turnoNueId: number) {
@@ -87,7 +86,6 @@ export async function reprogramarTurno(usuarioId:number, turnoActId: number, tur
         withCredentials: true,
     });
     if (!response.status) throw new Error("Error al reprogramar un turno.")
-    window.location.reload();
     return;
 }
 export async function agregarAColaEspera(turnoId: number, usuarioId: number): Promise<void> {

@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import type { TurnoData } from "../constants/turno";
-import "./Cards.css";
+import "./BotonesUsuario.css";
 import { useAuth } from "../context/AuthContext";
 import { calcularReembolso, cancelarTurno, estaInscriptoEnTurno, getTurnosSimilares, reprogramarTurno, agregarAColaEspera } from "../services/turnoService";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
 import { createPortal } from "react-dom";
 import type { reembolsoDTO } from "../constants/reembolso";
+import { toast } from "sonner";
+
 
 type Modo = "publico" | "misTurnos" ;
 interface Props {
@@ -13,8 +15,11 @@ interface Props {
     id: number;
     turnoLleno: Boolean;
     usuarioLogueado: Boolean;
+    tipoRutina?: string;
     onAgendar: () => void;
     onLogin: () => void;
+    onCancelar?: () => void;
+    onReprogramar?: () => void;
 }
 
 export function BotonesUsuarioTurno({
@@ -24,6 +29,8 @@ export function BotonesUsuarioTurno({
     usuarioLogueado,
     onAgendar,
     onLogin,
+    onCancelar = () => {},
+    onReprogramar = () => {},
 } :  Props) {
     const { user } = useAuth();
   const [mostrarPopUpReprogramar, setMostrarPopUpReprogramar] = React.useState(false);
@@ -52,64 +59,70 @@ export function BotonesUsuarioTurno({
       setLoadingSimilares(false);
     }
   }
-  
-  const modalReprogramar = mostrarPopUpReprogramar && createPortal(
-        <div className="modal-overlay">
-          <div className="modal-card">
+const modalReprogramar = mostrarPopUpReprogramar && createPortal(
+    <div className="modal-overlay">
+        <div className="modal-card modal-reprogramar-container">
             <h2>Turnos similares disponibles</h2>
             <p>Elegí un turno para reprogramar tu inscripción.</p>
             {loadingSimilares && (
-              <p><span className="button-spinner" aria-hidden="true" /> Buscando turnos similares...</p>
+                <p><span className="button-spinner" aria-hidden="true" /> Buscando turnos similares...</p>
             )}
             {!loadingSimilares && errorSimilares && <p>{errorSimilares}</p>}
             {!loadingSimilares && !errorSimilares && turnosSimilares.length === 0 && (
-              <p>No se encontraron turnos similares disponibles.</p>
+                <p>No se encontraron turnos similares disponibles.</p>
             )}
 
             {!loadingSimilares && !errorSimilares && turnosSimilares.length > 0 && (
-            <section className="activity-section" aria-labelledby="turnos-title">
-                {turnosSimilares.map((turnoSimilar) => (
-                <div className="card card-turno" key={turnoSimilar.id} >
-                    <div className="card-info">
-                    <p>Día: {formatearDiaEnEspanol(turnoSimilar.dia)}</p>
-                    <p>Fecha: {formatearFechaEnEspanol(turnoSimilar.fecha)}</p>
-                    <p>Hora: {turnoSimilar.hora}</p>
-                    <p>
-                      Cupo: {turnoSimilar.cantidadDePacientesActuales}/{turnoSimilar.cupoMaxPacientes}
-                    </p>
-                    <button
-                      className="btn-log"
-                      onClick={() => {
-                        if (!user?.id) return;
-                        reprogramarTurno(user.id, id, turnoSimilar.id);
-                      }}
-                    >
-                      Elegir este turno
-                    </button>
-                    </div>
+                <div className="grilla-opciones">
+                    {turnosSimilares.map((turnoSimilar) => (
+                        <div className="tarjeta-opcion" key={turnoSimilar.id}>
+                            <div className="tarjeta-header">
+                                <h3 className="tarjeta-titulo">Día: {formatearDiaEnEspanol(turnoSimilar.dia)}</h3>
+                                <div className="tarjeta-subtitulo">Fecha: {formatearFechaEnEspanol(turnoSimilar.fecha)}</div>
+                            </div>
+                            
+                            <div className="tarjeta-info">
+                                <p><strong>Fecha:</strong> <span>{formatearFechaEnEspanol(turnoSimilar.fecha)}</span></p>
+                                <p><strong>Hora:</strong> <span>{turnoSimilar.hora}</span></p>
+                                <p><strong>Cupo:</strong> <span>{turnoSimilar.cantidadDePacientesActuales}/{turnoSimilar.cupoMaxPacientes}</span></p>
+                            </div>
+
+                            <button
+                                className="btn-elegir-tarjeta"
+                                onClick={async () => {
+                                    if (!user?.id) return;
+                                    await reprogramarTurno(user.id, id, turnoSimilar.id);
+                                    toast.success("Turno reprogramado con éxito");
+                                    setMostrarPopUpReprogramar(false);
+                                    onReprogramar?.();
+                                }}
+                            >
+                                Elegir este turno
+                            </button>
+                        </div>
+                    ))}
                 </div>
-                ))}
-              </section>
             )}
             <div className="modal-actions">
-              <button className="btn-log" onClick={() => setMostrarPopUpReprogramar(false)}>
-                Cerrar
-              </button>
+                <button className="btn-log" onClick={() => setMostrarPopUpReprogramar(false)}>
+                    Cerrar
+                </button>
             </div>
-          </div>
-        </div>,
-      document.body  
-    );
+        </div>
+    </div>,
+    document.body  
+);
     // Verificar si el usuario esta inscripto.
     useEffect(() => {
       if (!user?.id) return;
         estaInscriptoEnTurno(user.id,id)
           .then(setEstaInscripto)
           .catch(err => console.error("Error al verificar inscripcion: ", err));
-      },[user,id]);
+      },[user?.id,id]);
     const handleIniciarCancelacion = async() => {
       if (!user?.id) return;
       setLoadingConfirmacion(true);
+      
       setErrorCancelar(null);
       try {
         const respuestaReembolso = await calcularReembolso(user.id,id);
@@ -126,7 +139,7 @@ export function BotonesUsuarioTurno({
         setLoadingConfirmacion(false);
       }
     }
-    const hadnleConfirmarCancelacion = async () => {
+    const handleConfirmarCancelacion = async () => {
         if (!user?.id) return;
         setLoadingCancelacion(true);
         setErrorCancelar(null);
@@ -134,6 +147,8 @@ export function BotonesUsuarioTurno({
           await cancelarTurno(user.id,id);
           setEstaInscripto(false);
           setMostrarModalConfirmacionCancelacion(false);
+          onCancelar();
+          toast.success("Turno cancelado con éxito");
           setDatosReembolso(null);
         } catch {
           setErrorCancelar("Error al cancelar el turno");
@@ -145,9 +160,9 @@ export function BotonesUsuarioTurno({
           if (!user?.id) return;
           try {
               await agregarAColaEspera(rutinaId, user.id);
-              alert("Te anotaste a la cola de espera");
+              toast.success("Te anotaste a la cola de espera");
           } catch (e: any) {
-              alert(e?.message || "Error al agregar a la cola de espera");
+              toast.error(e?.message || "Error al agregar a la cola de espera");
           }
       };
   const modalConfirmacionCancelacion = mostrarModalConfirmacionCancelacion &&
@@ -193,7 +208,7 @@ export function BotonesUsuarioTurno({
           </button>
           <button
             className="btn-log"
-            onClick={hadnleConfirmarCancelacion}
+            onClick={handleConfirmarCancelacion }
             disabled={loadingCancelacion}
           >
             {loadingCancelacion ? "Procesando..." : "Aceptar cancelación"}
@@ -203,19 +218,21 @@ export function BotonesUsuarioTurno({
     </div>,
     document.body
   );
-  if (modo === "misTurnos") { return ( 
-    <>
-    <button className="btn-log" onClick={handleIniciarCancelacion}>
-        {errorCancelar && <p style={{ color: 'red' }}>{errorCancelar}</p>}
-        {loadingInscripcion ? "Cancelando..." : "Cancelar turno"}
-    </button>
-    <button className="btn-log" onClick={abrirPopUpReprogramar}>
-        Reprogramar turno
-    </button>
+if (modo === "misTurnos") { return ( 
+  <>
+    <div className="acciones-usuario-container">
+        <button className="btn-accion-azul btn-accion-outline" onClick={handleIniciarCancelacion}>
+            {errorCancelar && <span style={{ color: 'red', marginRight: '8px' }}>{errorCancelar}</span>}
+            {loadingInscripcion ? "Cancelando..." : "Cancelar turno"}
+        </button>
+        <button className="btn-accion-azul" onClick={abrirPopUpReprogramar}>
+            Reprogramar turno
+        </button>
+    </div>
     {modalReprogramar}
     {modalConfirmacionCancelacion}
-    </>
-  )};
+  </>
+)};
       const renderSkeletons = () => (
         <div className="activity-skeleton-grid" aria-label="Cargando">
             {Array.from({ length: 3 }).map((_, index) => (

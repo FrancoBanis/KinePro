@@ -109,7 +109,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
       await handleCancelarRutina(rutinaRecibida.id, user.id);
       setEstaInscripto(false);
       toast.success("¡Rutina cancelada con éxito!");
-      onCancelarRutina?.();
+      onCancelarRutina?.(); 
     } catch (err) {
       toast.error("Error al cancelar la rutina");
     } finally {
@@ -125,46 +125,79 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
   }, [user, typedState, rutinaRecibida.id]);
 
 
+  const botonesUsuario = (
+    <BotonesUsuarioRutina
+      modo={modo}
+      estaInscripto={estaInscripto}
+      rutinaLlena={rutinaLlena}
+      id={rutinaRecibida.id}
+      turnos={turnos}
+      usuarioLogueado={!!user}
+      loadingInscripcion={loadingInscripcion}
+      onCancelar={handleCancelar}
+      onAgendar={abrirPopUp}
+      onLogin={() => navigateWithState(ROUTES.INICIAR_SESION,{from: location.pathname, abrirItemId: rutinaRecibida.id, tipo:"rutina"})}
+      onReprogramarRutina={onReprogramarRutina}
+    />
+  );
+
   return (
     <>
-      <div className="card card-rutina">
-        <div className="card-info">
-          <h3>{nombre}</h3>
-          <p>Profesionales: {nombresDeProfesionales}</p>
-          <p>Tipo de Rutina: {tipo.nombre}</p>
-          <p>Fecha de Inicio: {fechaDeInicio}</p>
-          <p>Fecha de Fin: {fechaDeFin}</p>
-          <p>Costo por Turno: {costoPorTurno}</p>
-          <p>Cupo: {cantidadPacientesRutina ?? 0}/{cupoMaxRutina}</p>
-
-          <div className="card-actions">
-           {puedeEditar && ( <>
-              <EnvioAviso onEnvio={enviarAviso} />     
-          <button className="btn-secondary" onClick={desactivarRutina}>
-             Desactivar
-          </button>
-          <button className="btn-secondary" onClick={onEditar}>
-            Modificar rutina
-          </button>
-          </>
-          )}
-            <BotonesUsuarioRutina
-              modo={modo}
-              estaInscripto={estaInscripto}
-              rutinaLlena={rutinaLlena}
-              id={rutinaRecibida.id}
-              turnos={turnos}
-              usuarioLogueado={!!user}
-              loadingInscripcion={loadingInscripcion}
-              onCancelar={handleCancelar}
-              onAgendar={abrirPopUp}
-              onLogin={() => navigateWithState(ROUTES.INICIAR_SESION,{from: location.pathname, abrirItemId: rutinaRecibida.id, tipo:"rutina"})}             
-              onReprogramarRutina={onReprogramarRutina}
-            />
+      {modo === 'misTurnos' ? (
+        <div className="mtr-rutina-header">
+          <h3 className="mtr-rutina-titulo">{nombre}</h3>
+          <div className="mtr-rutina-info">
+            <span><strong>Profesionales:</strong> {nombresDeProfesionales}</span>
+            <span><strong>Tipo:</strong> {tipo.nombre}</span>
+            <span><strong>Del</strong> {fechaDeInicio} <strong>al</strong> {fechaDeFin}</span>
+            <span><strong>Costo/turno:</strong> ${costoPorTurno}</span>
+            <span><strong>Cupo:</strong> {cantidadPacientesRutina ?? 0}/{cupoMaxRutina}</span>
+          </div>
+          <div className="mtr-rutina-acciones">
+            {puedeEditar && (
+              <>
+                <EnvioAviso onEnvio={enviarAviso} />
+                <button className="btn-secondary" onClick={desactivarRutina}>
+                  Desactivar
+                </button>
+                <button className="btn-secondary" onClick={onEditar}>
+                  Modificar rutina
+                </button>
+              </>
+            )}
+            {botonesUsuario}
             {accionAdicional}
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="card card-rutina">
+          <div className="card-info">
+            <h3>{nombre}</h3>
+            <p>Profesionales: {nombresDeProfesionales}</p>
+            <p>Tipo de Rutina: {tipo.nombre}</p>
+            <p>Fecha de Inicio: {fechaDeInicio}</p>
+            <p>Fecha de Fin: {fechaDeFin}</p>
+            <p>Costo por Turno: {costoPorTurno}</p>
+            <p>Cupo: {cantidadPacientesRutina ?? 0}/{cupoMaxRutina}</p>
+
+            <div className="card-actions">
+              {puedeEditar && (
+                <>
+                  <EnvioAviso onEnvio={enviarAviso} />
+                  <button className="btn-secondary" onClick={desactivarRutina}>
+                    Desactivar
+                  </button>
+                  <button className="btn-secondary" onClick={onEditar}>
+                    Modificar rutina
+                  </button>
+                </>
+              )}
+              {botonesUsuario}
+              {accionAdicional}
+            </div>
+          </div>
+        </div>
+      )}
 
       {mostrarPopUp && (
         <div className="modal-overlay">
@@ -188,7 +221,3 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
     </>
   );
 }
-function aync() {
-  throw new Error("Function not implemented.");
-}
-

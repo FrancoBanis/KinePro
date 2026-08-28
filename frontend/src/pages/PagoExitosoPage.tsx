@@ -1,9 +1,9 @@
-
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { procesarPago } from "../services/transaccionService";
 import { BACKEND_URL, ROUTES } from "../constants/config";
 import { toast } from "sonner";
+import "./PagoResultado.css";
 
 export function PagoExitoso() {
   const [searchParams] = useSearchParams();
@@ -15,7 +15,7 @@ export function PagoExitoso() {
   useEffect(() => {
     const procesar = async () => {
       try {
-        if (paymentId  && status) {
+        if (paymentId && status) {
           await procesarPago(paymentId);
         }
       } catch (err) {
@@ -26,24 +26,40 @@ export function PagoExitoso() {
     };
 
     procesar();
-  }, [paymentId, status, BACKEND_URL]);
+  }, [paymentId, status]);
 
   return (
-    <div>
-      <h1>Pago exitoso</h1>
-      <p>Gracias por tu compra.</p>
+    <div className="pago-resultado-container">
+      <div className="pago-card">
+        <div className="pago-icono exito">
+          <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
 
-      {status && <p>Estado recibido: {status}</p>}
-      {paymentId && <p>Payment ID: {paymentId}</p>}
+        <h1 className="pago-titulo">¡Pago exitoso!</h1>
+        <p className="pago-texto">Tu transacción se completó correctamente.</p>
 
-      {procesando ? (
-        <p>Procesando pago y generando turno...</p>
-      ) : (
-        <Link to={ROUTES.MIS_TURNOS}>Ver mis turnos</Link>
-      )}
+        {(status || paymentId) && (
+          <div className="pago-detalles">
+            {status && <p><strong>Estado:</strong> {status}</p>}
+            {paymentId && <p><strong>Comprobante:</strong> #{paymentId}</p>}
+          </div>
+        )}
+
+        {procesando ? (
+          <div style={{ marginTop: '20px' }}>
+            <div className="pago-spinner"></div>
+            <p className="pago-texto" style={{ fontSize: '0.9rem' }}>Procesando pago y generando turno...</p>
+          </div>
+        ) : (
+          <Link to={ROUTES.MIS_TURNOS} className="btn-pago btn-pago-exito">
+            Ver mis turnos
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
 
 export default PagoExitoso;
-
