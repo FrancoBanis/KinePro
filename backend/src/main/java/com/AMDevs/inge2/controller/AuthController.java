@@ -4,6 +4,8 @@ import com.AMDevs.inge2.entity.RolUsuarios;
 import com.AMDevs.inge2.entity.Usuario;
 import com.AMDevs.inge2.repository.TurnoRepository;
 import com.AMDevs.inge2.repository.UsuarioRepository;
+import com.AMDevs.inge2.service.JwtService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -47,7 +49,9 @@ public class AuthController {
 
     @Autowired
     private JavaMailSender mailSender;
-
+    
+    @Autowired 
+    private JwtService jwtService;
     private final SecureRandom random = new SecureRandom();
 
     @PostMapping("/login")
@@ -79,12 +83,7 @@ public class AuthController {
     }
 
     @PostMapping("/verify-token")
-    public ResponseEntity<?> verifyToken(
-            @RequestBody Map<String, String> body,
-            HttpSession session,
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
+    public ResponseEntity<?> verifyToken(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String token = body.get("token");
         if (email == null || token == null) {
@@ -128,13 +127,11 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("message", "Error al iniciar sesión. La cuenta fue desactivada."));
         }
-        createSession(
-                user,
-                session,
-                request,
-                response
-        );
-        return ResponseEntity.ok(user);
+        String jwt = jwtService.generateToken(user);
+        return ResponseEntity.ok(Map.of(
+                "token", jwt,
+                "user", user
+        ));
     }
 
     @PostMapping("/complete-registration")

@@ -27,7 +27,7 @@ public class JwtService {
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
-    private String buildToken(Usuario usuario){
+    public String buildToken(Usuario usuario){
         return Jwts.builder()
             .id(usuario.getId().toString())
             .subject(usuario.getEmail())
@@ -39,6 +39,10 @@ public class JwtService {
             .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
             .signWith(getSigningKey())
             .compact();
+    }
+
+    public String generateToken(Usuario usuario) {
+        return buildToken(usuario);
     }
 
     public String extractEmail(String token) {
