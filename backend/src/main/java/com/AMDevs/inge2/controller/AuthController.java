@@ -183,7 +183,7 @@ public class AuthController {
     }
 
     @GetMapping("/users/employees")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Usuario>> listEmployees() {
         List<Usuario> employees = repo.findByRolInAndEstadoNotOrderByApellidoAscNombreAsc(
                 List.of(RolUsuarios.ROLE_PROFESIONALES, RolUsuarios.ROLE_SECRETARIA),
@@ -236,7 +236,7 @@ public class AuthController {
 
 
     @PatchMapping("/users/{id}/role")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateUserRole(
             @PathVariable("id") Long id,
             @RequestBody RoleUpdateRequest body
@@ -266,7 +266,7 @@ public class AuthController {
     }
 
     @PatchMapping("/users/{id}/desactivar")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deactivateUser(@PathVariable("id") Long id) {
         return desactivarUsuarioPorId(id);
     }

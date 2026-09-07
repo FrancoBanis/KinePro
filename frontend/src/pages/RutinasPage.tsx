@@ -7,7 +7,6 @@ import { useAuth } from "../context/AuthContext";
 import "./RutinasYTurnos.css";
 import { getRutinasActivas, handleCrearRutina, handleModificarRutina } from "../services/rutinaService";
 
-// IMPORTAMOS TU NUEVO SERVICIO DE COLA DE RUTINAS
 import { agregarAColaRutina, estaEnColaRutina } from "../services/colaRutinaService"; 
 import { toast } from "sonner";
 
@@ -31,7 +30,6 @@ export function RutinasPage() {
     const [formMode, setFormMode] = useState<"create" | "edit">("create");
     const [rutinaEnEdicion, setRutinaEnEdicion] = useState<RutinaData | null>(null);
     
-    // Estado dinámico para saber en qué rutinas ya está anotado en cola el usuario
     const [colasEspera, setColasEspera] = useState<Record<number, boolean>>({});
     
     const actualizarRutinas = async (ignore = false) => {
@@ -55,12 +53,10 @@ export function RutinasPage() {
             if (!ignore) setLoadingRutinas(false);
         }
     };
-    // Función para verificar si el usuario logueado ya está en la cola de las rutinas llenas
     const verificarColasEspera = async (rutinasCargadas: RutinaData[]) => {
         if (!user?.id) return;
         const nuevoEstadoColas: Record<number, boolean> = {};
 
-        // Filtramos las rutinas que están llenas y en las que el usuario no está inscripto
         const rutinasLlenasYNoInscripto = rutinasCargadas.filter((rutina) => {
             const turnosActivos = (rutina.turnos || []).filter((t: any) => t.activa !== false);
             
@@ -71,7 +67,6 @@ export function RutinasPage() {
             );
             const rutinaLlena = cupoMaximoAlcanzado || todosTurnosLlenos;
 
-            // Verificación de Inscripción activa (para no verificar colas de algo donde ya estás)
             const estaInscripto = turnosActivos.some((t: any) => 
                 (t.pacientesDesdeRutina ?? []).some((u: any) => u.id === user.id)
             );
@@ -79,7 +74,6 @@ export function RutinasPage() {
             return rutinaLlena && !estaInscripto;
         });
 
-        // Hacemos las consultas al backend en paralelo
         await Promise.all(
             rutinasLlenasYNoInscripto.map(async (rutina) => {
                 try {
@@ -102,7 +96,6 @@ export function RutinasPage() {
         };
     }, []);
 
-    // Cada vez que cambian las rutinas o el estado de autenticación del usuario, verificamos sus colas
     useEffect(() => {
         if (rutinas.length > 0 && user?.id) {
             verificarColasEspera(rutinas);
@@ -137,13 +130,11 @@ export function RutinasPage() {
           }
         : undefined;
 
-    // Actualizamos esta función para usar el nuevo servicio exclusivo de colas de rutina
     const handleAgregarACola = async (rutinaId: number) => {
         if (!user?.id) return;
         try {
             await agregarAColaRutina(rutinaId, user.id);
             
-            // Actualizamos el estado local inmediatamente
             setColasEspera((prev) => ({ ...prev, [rutinaId]: true }));
             toast.success("¡Te anotaste exitosamente a la cola de espera de la rutina!");
         } catch (e: any) {
@@ -264,22 +255,18 @@ export function RutinasPage() {
                         {rutinas.map((rutina) => {
                             const turnosActivos = (rutina.turnos || []).filter((t: any) => t.activa !== false);
                             
-                            // Determinamos de forma exacta si la rutina está llena
                             const cupoMaximoAlcanzado = (rutina.cantidadPacientesRutina ?? 0) >= (rutina.cupoMaxRutina ?? Infinity);
                             const todosTurnosLlenos = turnosActivos.length > 0 && turnosActivos.every(
                                 (t: any) => t.cantidadDePacientesActuales >= t.cupoMaxPacientes
                             );
                             const rutinaLlena = cupoMaximoAlcanzado || todosTurnosLlenos;
 
-                            // Verificamos si el usuario ya está inscripto
                             const estaInscripto = turnosActivos.some((t: any) => 
                                 (t.pacientesDesdeRutina ?? []).some((u: any) => u.id === user?.id)
                             );
 
-                            // Consultamos el estado de cola local para esta rutina
                             const yaEnCola = colasEspera[rutina.id] || false;
 
-                            // Renderizamos el botón solo si la rutina está llena, el usuario está logueado y NO está inscripto
                             const accionCola = user && rutinaLlena && !estaInscripto ? (
                                 <button 
                                     className="btn-log" 
