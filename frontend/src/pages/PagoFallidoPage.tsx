@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "../constants/config";
-import "./PagoResultado.css"; // <-- IMPORTA EL CSS AQUÍ
+import "./PagoResultado.css"; 
 
 export function PagoFallido() {
   return (

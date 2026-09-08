@@ -24,3 +24,14 @@ export interface UpdateUserPayload {
   email?: string;
   rol?: string;
 }
+
+export interface RegisterForm {
+  email: string;
+  nombre: string;
+  fechaNacimiento: string;
+  apellido?: string;
+  dni?: number;
+}
+export interface RegisterProps {
+  email?: string;
+}

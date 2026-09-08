@@ -1,4 +1,3 @@
-// frontend/src/components/Turno.tsx
 import React, { useEffect, useCallback } from "react";
 import { type TurnoData } from "../constants/turno";
 import MercadoPagoWallet from "../mercado-pago-checkouts/mercadoPagoWallet/MercadoPagoWallet";

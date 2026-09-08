@@ -1,10 +1,30 @@
 import axios from "axios";
 import { ENDPOINTS_ADMINISTRAR_USUARIOS } from "../constants/config";
-import type { CreateUserForm, UpdateUserPayload, UsuarioData } from "../constants/usuarioData";
+import type { CreateUserForm, RegisterForm, UpdateUserPayload, UsuarioData } from "../constants/usuarioData";
 import api from "./axiosInstance";
+import type { User } from "../context/AuthContext";
 
-
-
+export async function registrarUsuario(form: RegisterForm): Promise<{ data: { token: string; user: User } }> {
+    const response = await api.post(ENDPOINTS_ADMINISTRAR_USUARIOS.CREAR_USUARIO,form)
+    return response;
+  }
+export async function actualizarMisDatos(
+  nombre: String, 
+  apellido: String,
+  dni: number,
+  email: string | undefined
+): Promise<User> {
+  const response = await api.put(ENDPOINTS_ADMINISTRAR_USUARIOS.ACTUALIZAR_MIS_DATOS,{
+    nombre: nombre,
+    apellido: apellido,
+    dni: dni,
+    email: email
+  })
+  return response.data;
+}
+export async function desactivarCuenta() {
+  await api.patch(ENDPOINTS_ADMINISTRAR_USUARIOS.DESACTIVAR_CUENTA);
+}
 export async function cambiarRolUsuario(rol: string, user: UsuarioData): Promise<void> {
   try {
     await api.patch(ENDPOINTS_ADMINISTRAR_USUARIOS.CAMBIAR_ROL(user), { ...user, rol });
@@ -35,7 +55,16 @@ export async function buscarUsuarios(query: string): Promise<UsuarioData[]> {
     return [];
   }
 }
-
+export async function editarUsuario(data: UsuarioData): Promise<void> {
+  await api.put(ENDPOINTS_ADMINISTRAR_USUARIOS.EDITAR_USUARIO,{
+    nombre: data.nombre,
+    apellido: data.apellido,
+    dni: Number(data.dni),
+    fechaNacimiento: data.fechaNacimiento,
+    email: data.email,
+    rol: data.rol
+  });
+}
 export async function crearUsuario(payload: CreateUserForm): Promise<void> {
   try {
     await api.post(ENDPOINTS_ADMINISTRAR_USUARIOS.CREAR_USUARIO, payload);

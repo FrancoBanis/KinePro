@@ -1,11 +1,9 @@
 package com.AMDevs.inge2.service;
 
 import com.AMDevs.inge2.entity.ColaEsperaTurno;
-import com.AMDevs.inge2.entity.Rutina;
 import com.AMDevs.inge2.entity.Turno;
 import com.AMDevs.inge2.entity.Usuario;
 import com.AMDevs.inge2.repository.ColaEsperaTurnoRepository;
-import com.AMDevs.inge2.repository.RutinaRepository;
 import com.AMDevs.inge2.repository.TurnoRepository;
 import com.AMDevs.inge2.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;

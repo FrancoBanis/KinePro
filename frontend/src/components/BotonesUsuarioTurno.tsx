@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { TurnoData } from "../constants/turno";
 import "./BotonesUsuario.css";
 import { useAuth } from "../context/AuthContext";

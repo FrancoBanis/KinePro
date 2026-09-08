@@ -9,7 +9,7 @@ import './VerEmpleados.css'
 import { ROUTES } from '../constants/config'
 import type { UsuarioData } from '../constants/usuarioData'
 import { toast } from 'sonner'
-import { cambiarRolUsuario, desactivarUsuario, obtenerEmpleados } from '../services/administrarUsuarios'
+import { cambiarRolUsuario, desactivarUsuario, editarUsuario, obtenerEmpleados } from '../services/administrarUsuarios'
 import api from '../services/axiosInstance'
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
@@ -86,17 +86,15 @@ function VerEmpleados() {
     if (!selectedUser) return
     setEditLoading(true)
     try {
-      await api.put(
-        "http://localhost:8080/api/auth/users",
-        {
-          nombre: editForm.nombre,
-          apellido: editForm.apellido,
-          dni: Number(editForm.dni),
-          fechaNacimiento: editForm.fechaNacimiento,
-          email: selectedUser.email,
-          rol: selectedUser.rol,
-        }
-      )
+      const data = {
+        nombre: editForm.nombre,
+        apellido: editForm.apellido,
+        dni: editForm.dni,
+        fechaNacimiento: editForm.fechaNacimiento,
+        email: selectedUser.email,
+        rol: selectedUser.rol
+      }
+      await editarUsuario(data as UsuarioData);
       closeEmployeeEditor()
       toast.success('Datos actualizados correctamente.')
       await loadEmployees()

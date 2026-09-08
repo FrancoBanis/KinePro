@@ -1,15 +1,11 @@
 package com.AMDevs.inge2.service;
-
 import com.AMDevs.inge2.dto.ReembolsoRequestDTO;
 import com.AMDevs.inge2.entity.Rutina;
 import com.AMDevs.inge2.entity.Turno;
 import com.AMDevs.inge2.entity.Usuario;
 import com.AMDevs.inge2.repository.TurnoRepository;
-
 import org.springframework.stereotype.Service;
-
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

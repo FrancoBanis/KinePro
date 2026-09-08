@@ -29,6 +29,9 @@ export const ENDPOINTS_ADMINISTRAR_USUARIOS = {
     DESACTIVAR_USUARIO: (id: number) => `${BACKEND_URL}/api/auth/users/${id}/desactivar`,
     EMPLEADOS: `${BACKEND_URL}/api/auth/users/employees`,
     CAMBIAR_ROL: (user: UsuarioData) => `${BACKEND_URL}/api/auth/users/${user.id}/role`,
+    ACTUALIZAR_MIS_DATOS: `${BACKEND_URL}/api/auth/users`,
+    DESACTIVAR_CUENTA: `${BACKEND_URL}/api/auth/users/me/desactivar`,
+    EDITAR_USUARIO: `${BACKEND_URL}/api/auth/users`,
 }
 export const ENDPOINTS_COLA_RUTINA = {
     RECIBIR_RESPUESTA_COLA_RUTINA: (rutinaId: number, usuarioId: number) => 

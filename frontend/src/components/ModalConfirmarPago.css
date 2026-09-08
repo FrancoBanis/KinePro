@@ -17,18 +17,17 @@
     border-radius: 16px;
     padding: 28px;
     width: 90%;
-    max-width: 780px; /* Ancho suficiente para las dos columnas */
+    max-width: 780px; 
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .modal-pago-body {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* Columna izquierda 45%, derecha 55% */
+    grid-template-columns: 1fr 1.2fr;
     gap: 32px;
     align-items: start;
 }
 
-/* Columna Izquierda */
 .col-resumen h2 {
     margin-top: 0;
     font-size: 1.5rem;
@@ -92,7 +91,7 @@
 
 .grilla-turnos-incluidos {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 tarjetas por fila como en tu dibujo */
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     max-height: 280px;
     overflow-y: auto;
@@ -100,7 +99,7 @@
 }
 
 .tarjeta-mini-turno {
-    background: #fef08a; /* Color amarillento estilo tu boceto, o cambialo a #f8fafc */
+    background: #fef08a; 
     border: 1px solid #fde047;
     border-radius: 10px;
     padding: 12px;

@@ -8,20 +8,13 @@ import { calcularEdad, obtenerLimitesFechaNacimiento } from "../utils/formateado
 import { ROUTES } from "../constants/config";
 import { toast } from "sonner";
 import api from "../services/axiosInstance";
+import type { RegisterForm, RegisterProps } from "../constants/usuarioData";
+import { registrarUsuario } from "../services/administrarUsuarios";
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento();
 
-interface RegisterForm {
-  email: string;
-  nombre: string;
-  fechaNacimiento: string;
-  apellido?: string;
-  dni?: number;
-}
 
-interface RegisterProps {
-  email?: string;
-}
+
 
 function Register({ email = "" }: RegisterProps) {
   const location = useLocation();
@@ -64,10 +57,7 @@ function Register({ email = "" }: RegisterProps) {
     setLoading(true);
 
     try {
-      const res = await api.post(
-        "http://localhost:8080/api/auth/complete-registration",
-        form
-      )
+      const res = await registrarUsuario(form);
       setToken(res.data.token);
       setUser(res.data.user);
       navigate(from, {

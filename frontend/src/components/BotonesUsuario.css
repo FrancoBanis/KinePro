@@ -1,13 +1,12 @@
-/* Contenedor que agrupa los botones y les da el espacio (gap) */
+
 .acciones-usuario-container {
     display: flex;
-    gap: 14px; /* Aquí controlas la separación exacta */
+    gap: 14px; 
     flex-wrap: wrap;
     align-items: center;
     margin-top: 8px;
 }
 
-/* Botón principal azulado (Reprogramar, Agendar) */
 .btn-accion-azul {
     display: inline-flex;
     align-items: center;
@@ -18,7 +17,7 @@
     line-height: 1.2;
     border-radius: 8px;
     border: 1px solid transparent;
-    background-color: #0284c7; /* Color azulado base (puedes ajustar el hex) */
+    background-color: #0284c7; 
     color: white;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
@@ -26,7 +25,7 @@
 }
 
 .btn-accion-azul:hover {
-    background-color: #0369a1; /* Azul más oscuro al pasar el mouse */
+    background-color: #0369a1; 
     box-shadow: 0 6px 14px rgba(2, 132, 199, 0.3);
     transform: translateY(-1px);
 }
@@ -38,7 +37,6 @@
     transform: none;
 }
 
-/* Variante para el botón de cancelar (Azul muy claro con borde oscuro o texto distinto) */
 .btn-accion-outline {
     background-color: white;
     color: #0284c7;
@@ -46,30 +44,25 @@
 }
 
 .btn-accion-outline:hover {
-    background-color: #f0f9ff; /* Fondo celeste muy suave */
+    background-color: #f0f9ff; 
     box-shadow: none;
 }
 
-/* 1. Hacer el modal un poco más ancho para que entren las dos columnas */
 .modal-reprogramar-container {
-    max-width: 700px !important; /* Ajusta este valor si tu modal actual es muy angosto */
+    max-width: 700px !important; 
     width: 90%;
     padding: 24px;
 }
 
-/* 2. El contenedor que hace la magia de la grilla 2x2 (basado en tu dibujo) */
 .grilla-opciones {
     display: grid;
-    /* Esto crea 2 columnas que se adaptan si la pantalla es chica */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
     gap: 16px;
     margin-top: 20px;
-    max-height: 60vh; /* Para que el modal no se haga infinito y tenga scroll */
+    max-height: 60vh; 
     overflow-y: auto;
-    padding-right: 8px; /* Espacio para la barra de scroll */
+    padding-right: 8px; 
 }
-
-/* 3. Estilo de cada tarjeta individual */
 .tarjeta-opcion {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
@@ -85,10 +78,9 @@
 .tarjeta-opcion:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-    border-color: #0284c7; /* Borde azulado al pasar el mouse */
+    border-color: #0284c7; 
 }
 
-/* 4. Cabecera de la tarjeta para resaltar DÍA y FECHA */
 .tarjeta-header {
     border-bottom: 2px solid #f1f5f9;
     padding-bottom: 10px;
@@ -109,25 +101,22 @@
     font-weight: 500;
 }
 
-/* 5. Estilo de la información interior */
 .tarjeta-info p {
     margin: 6px 0;
     font-size: 0.95rem;
     color: #334155;
     display: flex;
-    justify-content: space-between; /* Pone la etiqueta a la izq y el valor a la der */
+    justify-content: space-between; 
 }
 
 .tarjeta-info strong {
     color: #0f172a;
 }
-
-/* 6. El Botón verde estilizado */
 .btn-elegir-tarjeta {
     margin-top: 16px;
-    width: 100%; /* Ocupa todo el ancho de la tarjeta */
+    width: 100%; 
     padding: 12px;
-    background-color: #10b981; /* Verde esmeralda */
+    background-color: #10b981;
     color: white;
     border: none;
     border-radius: 8px;
@@ -138,7 +127,7 @@
 }
 
 .btn-elegir-tarjeta:hover {
-    background-color: #059669; /* Verde más oscuro */
+    background-color: #059669; 
 }
 
 .btn-elegir-tarjeta:active {

@@ -22,10 +22,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Limpiar todo
       sessionStorage.removeItem('jwt_token');
       sessionStorage.removeItem('user');
-      // Redirigir al login
       window.location.href = ROUTES.INICIAR_SESION;
     }
     return Promise.reject(error);

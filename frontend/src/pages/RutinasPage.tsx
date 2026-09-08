@@ -60,7 +60,6 @@ export function RutinasPage() {
         const rutinasLlenasYNoInscripto = rutinasCargadas.filter((rutina) => {
             const turnosActivos = (rutina.turnos || []).filter((t: any) => t.activa !== false);
             
-            // Criterios de Rutina Llena (alineado con Rutina.tsx)
             const cupoMaximoAlcanzado = (rutina.cantidadPacientesRutina ?? 0) >= (rutina.cupoMaxRutina ?? Infinity);
             const todosTurnosLlenos = turnosActivos.length > 0 && turnosActivos.every(
                 (t: any) => t.cantidadDePacientesActuales >= t.cupoMaxPacientes

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { getCantidadDeMisRutinas, getCantidadDeRutinas, getRutinasSimilares, reprogramarRutina } from "../services/rutinaService";
+import { getCantidadDeRutinas, getRutinasSimilares, reprogramarRutina } from "../services/rutinaService";
 import { useAuth } from "../context/AuthContext";
 import type { RutinaData } from "../constants/rutina";
 import type { TurnoData } from "../constants/turno";
 import type { reembolsoDTO } from "../constants/reembolso";
-import { getTurnosSimilares, calcularReembolso } from "../services/turnoService";
+import { calcularReembolso } from "../services/turnoService";
 import { formatearDiaEnEspanol, formatearFechaEnEspanol } from "../utils/formateador";
 import { createPortal } from "react-dom";
 import { toast } from "sonner";

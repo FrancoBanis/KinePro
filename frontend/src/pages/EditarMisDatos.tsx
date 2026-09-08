@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ROUTES } from "../constants/config";
 import { toast } from "sonner";
-import api from "../services/axiosInstance";
+import { actualizarMisDatos, desactivarCuenta } from "../services/administrarUsuarios";
 
 export function EditarDatosPage() {
     const { user, setUser, logout } = useAuth();
@@ -32,17 +31,8 @@ export function EditarDatosPage() {
         }
 
         try {
-            const response = await api.put(
-                "http://localhost:8080/api/auth/users",
-                {
-                    nombre: nombre.trim(),
-                    apellido: apellido.trim(),
-                    dni: dniNumber,
-                    email: user?.email,
-                }
-            );
-
-            setUser(response.data);
+            const response = await actualizarMisDatos(nombre, apellido, dniNumber, email);
+            setUser(response);
             toast.success("Datos actualizados correctamente.");
         } catch (err) {
             toast.error("No se pudieron guardar los cambios.");
@@ -56,8 +46,7 @@ export function EditarDatosPage() {
         setDeactivateLoading(true);
 
         try {
-            await api.patch(
-                `http://localhost:8080/api/auth/users/me/desactivar`);
+            await desactivarCuenta();
             toast.success("Cuenta desactivada correctamente.");
             logout();
             navigate(ROUTES.HOME);
