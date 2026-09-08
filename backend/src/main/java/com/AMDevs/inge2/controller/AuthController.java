@@ -1,28 +1,23 @@
 package com.AMDevs.inge2.controller;
 
+import com.AMDevs.inge2.dto.UsuarioDTO;
 import com.AMDevs.inge2.entity.RolUsuarios;
 import com.AMDevs.inge2.entity.Usuario;
 import com.AMDevs.inge2.repository.TurnoRepository;
 import com.AMDevs.inge2.repository.UsuarioRepository;
 import com.AMDevs.inge2.service.JwtService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
+
 import org.springframework.web.bind.annotation.*;
 
 
@@ -47,13 +42,23 @@ public class AuthController {
     @Autowired
     private TurnoRepository turnoRepository;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    //@Autowired
+    //private JavaMailSender mailSender;
     
     @Autowired 
     private JwtService jwtService;
     private final SecureRandom random = new SecureRandom();
-
+        private UsuarioDTO mapToDTO(Usuario user) {
+        return new UsuarioDTO(
+                user.getId(),
+                user.getNombre(),
+                user.getApellido(),
+                user.getEmail(),
+                user.getRol(),
+                user.getDni(),
+                user.getFechaNacimiento()
+        );
+        }
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @RequestBody Map<String, String> body
@@ -130,17 +135,12 @@ public class AuthController {
         String jwt = jwtService.generateToken(user);
         return ResponseEntity.ok(Map.of(
                 "token", jwt,
-                "user", user
+                "user", mapToDTO(user)
         ));
     }
 
     @PostMapping("/complete-registration")
-    public ResponseEntity<?> completeRegistration(
-            @RequestBody Usuario user,
-            HttpSession session,
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
+    public ResponseEntity<?> completeRegistration(@RequestBody Usuario user) {
         try {
             Optional<Usuario> existing =
                     repo.findByEmail(user.getEmail());
@@ -151,12 +151,8 @@ public class AuthController {
             user.setRol(RolUsuarios.ROLE_PACIENTE);
             user.setEstado("activa");
             Usuario saved = repo.save(user);
-            Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
-            boolean alreadyAuthenticated = currentAuth != null && currentAuth.isAuthenticated() && !(currentAuth instanceof AnonymousAuthenticationToken);
-            if (!alreadyAuthenticated) {
-                createSession(saved, session, request, response);
-            }
-            return ResponseEntity.ok(saved);
+            String jwt = jwtService.generateToken(saved);
+            return ResponseEntity.ok(Map.of("token", jwt, "user", mapToDTO(saved)));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -210,7 +206,6 @@ public class AuthController {
         if (body.fechaNacimiento() != null) user.setFechaNacimiento(body.fechaNacimiento());
         if (body.rol() != null) user.setRol(RolUsuarios.valueOf(body.rol()));
         Usuario saved = repo.save(user);
-        session.setAttribute("user", saved);
         return ResponseEntity.ok(saved);
     }
 
@@ -293,40 +288,6 @@ public class AuthController {
         user.setEstado("desactivada");
         return ResponseEntity.ok(repo.save(user));
     }
-    private void createSession(
-            Usuario user,
-            HttpSession session,
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
-        List<SimpleGrantedAuthority> authorities =
-                List.of(
-                        new SimpleGrantedAuthority(
-                                user.getRol().name()
-                        )
-                );
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(
-                        user,
-                        null,
-                        authorities
-                );
-        SecurityContext context =
-                SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-        SecurityContextRepository repository =
-                new HttpSessionSecurityContextRepository();
-        repository.saveContext(
-                context,
-                request,
-                response
-        );
-        session.setAttribute(
-                "user",
-                user
-        );
-    }
     private String generateToken() {
         return String.format(
                 "%06d",
@@ -347,7 +308,7 @@ public class AuthController {
         message.setText(
                 "Tu token es: " + token + " (expira en 30 segundos)"
         );
-        mailSender.send(message);
+        //mailSender.send(message);
     }
     private record UserUpdateRequest(
             String nombre,

@@ -66,6 +66,7 @@ export function Rutina({ rutinaRecibida, modo = 'publico', puedeEditar = false, 
     return;
   }
     await handleDesactivarRutina(rutinaRecibida.id, () => {onRutinaDesactivada?.();});
+    toast.success("Rutina desactivada de forma exitosa");
   };
 
   const enviarAviso = async (texto : String) => {

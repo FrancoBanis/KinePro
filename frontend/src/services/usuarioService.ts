@@ -1,17 +1,14 @@
-import axios from "axios";
+import api from "./axiosInstance";
 import { ENDPOINTS_USUARIO } from "../constants/config";
-
- 
 export async function iniciarSesion(email: string): Promise<void> {
-    await axios.post(
+    await api.post(
         ENDPOINTS_USUARIO.LOGIN,
         { email },
-        { withCredentials: true }
       );
 }
 
 export async function verificarToken(email: string, token: string) {
-    const res = await axios.post(
+    const res = await api.post(
         ENDPOINTS_USUARIO.VERIFICAR_TOKEN,
         {
           email,

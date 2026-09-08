@@ -32,7 +32,7 @@ public class TipoRutinaController {
     }
 
     @PostMapping("/admin")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<?> crear(@RequestBody TipoRutina tipoRutina) {
         try {
             return ResponseEntity.ok(tipoRutinaService.crearTipoRutina(tipoRutina));
@@ -42,7 +42,7 @@ public class TipoRutinaController {
     }
 
     @PutMapping("/admin/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody TipoRutina tipoRutina) {
         try {
             return ResponseEntity.ok(tipoRutinaService.modificarTipoRutina(id, tipoRutina));
@@ -52,7 +52,7 @@ public class TipoRutinaController {
     }
 
     @DeleteMapping("/admin/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         try {
             tipoRutinaService.eliminarTipoRutina(id);

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ROUTES } from "../constants/config";
 import { toast } from "sonner";
+import api from "../services/axiosInstance";
 
 export function EditarDatosPage() {
     const { user, setUser, logout } = useAuth();
@@ -31,15 +32,14 @@ export function EditarDatosPage() {
         }
 
         try {
-            const response = await axios.put(
+            const response = await api.put(
                 "http://localhost:8080/api/auth/users",
                 {
                     nombre: nombre.trim(),
                     apellido: apellido.trim(),
                     dni: dniNumber,
                     email: user?.email,
-                },
-                { withCredentials: true }
+                }
             );
 
             setUser(response.data);
@@ -56,15 +56,15 @@ export function EditarDatosPage() {
         setDeactivateLoading(true);
 
         try {
-            await axios.patch(
-                `http://localhost:8080/api/auth/users/me/desactivar`,
-                undefined,
-                { withCredentials: true }
-            );
+            await api.patch(
+                `http://localhost:8080/api/auth/users/me/desactivar`);
+            toast.success("Cuenta desactivada correctamente.");
             logout();
             navigate(ROUTES.HOME);
+            setDeactivateLoading(false);
         } catch (err) {
             toast.error("No se pudo desactivar la cuenta.");
+            setDeactivateLoading(false);
         } finally {
             setDeactivateLoading(false);
         }
@@ -128,7 +128,7 @@ export function EditarDatosPage() {
                             onClick={handleDeactivateAccount}
                             disabled={deactivateLoading}
                         >
-                            {deactivateLoading ? toast.loading("Desactivando...") : "Desactivar cuenta"}
+                            {deactivateLoading ? "Desactivando..." : "Desactivar cuenta"}
                         </button>
                     </div>
                 </form>

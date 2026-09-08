@@ -7,6 +7,7 @@ import { useLocationState } from "../components/hooks/useLocationState";
 import { calcularEdad, obtenerLimitesFechaNacimiento } from "../utils/formateador";
 import { ROUTES } from "../constants/config";
 import { toast } from "sonner";
+import api from "../services/axiosInstance";
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento();
 
@@ -26,7 +27,7 @@ function Register({ email = "" }: RegisterProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { setUser } = useAuth();
+  const { setUser, setToken } = useAuth();
   const { typedState } = useLocationState();
   const from = typedState?.from || ROUTES.HOME;
   const email_1 = location.state?.email || "";
@@ -63,16 +64,12 @@ function Register({ email = "" }: RegisterProps) {
     setLoading(true);
 
     try {
-      const res = await axios.post(
+      const res = await api.post(
         "http://localhost:8080/api/auth/complete-registration",
-        form,
-        {
-          withCredentials: true,
-        }
-      );
-
-      setUser(res.data);
-
+        form
+      )
+      setToken(res.data.token);
+      setUser(res.data.user);
       navigate(from, {
         state: {
           from,
@@ -80,14 +77,13 @@ function Register({ email = "" }: RegisterProps) {
           tipo: typedState?.tipo,
         },
       });
+      toast.success("Registro completado con éxito.");
     } catch (err: any) {
       if (axios.isAxiosError(err) && err.response) {
         toast.error(
           err.response.data?.message ||
-            "Error al registrar usuario"
+            "Error al completar el registro."
         );
-      } else {
-        toast.error("Error al conectar con el servidor.");
       }
     } finally {
       setLoading(false);
@@ -163,3 +159,5 @@ function Register({ email = "" }: RegisterProps) {
 }
 
 export default Register;
+
+

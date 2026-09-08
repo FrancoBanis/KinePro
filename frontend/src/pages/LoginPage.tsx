@@ -16,7 +16,7 @@ export function LoginPage() {
     setLoading(true);
 
     try {
-      iniciarSesion(email);
+      await iniciarSesion(email);
       navigate(ROUTES.VALIDAR_TOKEN, {
         state: {
           ...location.state,

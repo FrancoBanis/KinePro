@@ -9,6 +9,8 @@ import './VerEmpleados.css'
 import { ROUTES } from '../constants/config'
 import type { UsuarioData } from '../constants/usuarioData'
 import { toast } from 'sonner'
+import { cambiarRolUsuario, desactivarUsuario, obtenerEmpleados } from '../services/administrarUsuarios'
+import api from '../services/axiosInstance'
 
 const limitesFechaNacimiento = obtenerLimitesFechaNacimiento()
 
@@ -35,11 +37,8 @@ function VerEmpleados() {
     setEmployeesLoading(true)
     setEmployeesError(null)
     try {
-      const response = await axios.get<UsuarioData[]>(
-        "http://localhost:8080/api/auth/users/employees",
-        { withCredentials: true }
-      )
-      setEmployees(response.data)
+      const response = await obtenerEmpleados();
+      setEmployees(response)
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 403) {
         setEmployeesError('La sesión venció. Cerrá sesión e ingresá nuevamente como administrador.')
@@ -87,7 +86,7 @@ function VerEmpleados() {
     if (!selectedUser) return
     setEditLoading(true)
     try {
-      await axios.put(
+      await api.put(
         "http://localhost:8080/api/auth/users",
         {
           nombre: editForm.nombre,
@@ -96,8 +95,7 @@ function VerEmpleados() {
           fechaNacimiento: editForm.fechaNacimiento,
           email: selectedUser.email,
           rol: selectedUser.rol,
-        },
-        { withCredentials: true }
+        }
       )
       closeEmployeeEditor()
       toast.success('Datos actualizados correctamente.')
@@ -114,11 +112,7 @@ function VerEmpleados() {
     setRoleError(null)
     setRoleLoading(true)
     try {
-      await axios.patch(
-        `http://localhost:8080/api/auth/users/${selectedRoleUser.id}/role`,
-        { rol: roleValue },
-        { withCredentials: true }
-      )
+      await cambiarRolUsuario(roleValue, selectedRoleUser)
       closeRoleEditor()
       toast.success('Rol actualizado correctamente.')
       await loadEmployees()
@@ -139,11 +133,7 @@ function VerEmpleados() {
     setEmployeeActionId(employee.id)
     setEmployeesError(null)
     try {
-      await axios.patch(
-        `http://localhost:8080/api/auth/users/${employee.id}/desactivar`,
-        undefined,
-        { withCredentials: true }
-      )
+      await desactivarUsuario(employee.id);
       toast.success('Cuenta desactivada correctamente.')
       await loadEmployees()
     } catch (error: unknown) {

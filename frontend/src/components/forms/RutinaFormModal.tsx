@@ -76,12 +76,7 @@ export default function RutinaFormModal({
       setLoadingTipos(true);
 
       try {
-        const response = await obtenerTiposRutina()
-        if (!response.ok) {
-          toast.error("Error al cargar tipos");
-        }
-
-        const data = await response.json();
+        const data = await obtenerTiposRutina();
         setTiposRutina(data || []);
       } catch (error) {
         toast.error("Error al cargar tipos: " + error);

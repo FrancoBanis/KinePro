@@ -13,6 +13,7 @@ export interface User {
 interface AuthContextType {
   user: User | null
   setUser: (u: User | null) => void
+  setToken: (token: string | null) => void 
   logout: () => void
 }
 
@@ -30,10 +31,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [user])
 
   const setUser = (u: User | null) => setUserState(u)
-  const logout = () => setUserState(null)
+  const setToken = (token: string | null) => {
+    if (token) {
+      sessionStorage.setItem('jwt_token', token)
+    } else {
+      sessionStorage.removeItem('jwt_token')
+    }
+  }
+  const logout = () => {
+    setUserState(null)
+      sessionStorage.removeItem('jwt_token')
+    sessionStorage.removeItem('user')
+  }
+
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, setToken, logout }}>
       {children}
     </AuthContext.Provider>
   )

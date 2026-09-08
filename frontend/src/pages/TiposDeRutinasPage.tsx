@@ -35,14 +35,7 @@ export function TipoRutinasPage() {
     setError(null);
 
     try {
-      const response = await obtenerTiposRutina(); 
-
-      if (!response.ok) {
-        const texto = await response.text();
-        toast.error(texto || "Error al cargar tipos");
-      }
-
-      const data = await response.json();
+      const data = await obtenerTiposRutina();
       setTipos(data || []);
     } catch {
       toast.error("Error al obtener los tipos de rutina");
@@ -264,7 +257,7 @@ export function TipoRutinasPage() {
                     <p>Fecha de Inicio: {rutina.fechaDeInicio}</p>
                     <p>Fecha de Fin: {rutina.fechaDeFin}</p>
                     <p>Costo por Turno: {rutina.costoPorTurno}</p>
-                    <p>Capacidad Máxima: {rutina.capacidadMaxima}</p>
+                    <p>Capacidad Máxima: {rutina.cupoMaxRutina}</p>
 
                     <div className="rutina-turnos">
                       <h4>Turnos asociados</h4>

@@ -125,13 +125,13 @@ public class RutinaController {
     }
 
     @PostMapping ("/admin")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<Rutina> crear(@RequestBody RutinaRequestDTO request) {
         return ResponseEntity.ok(rutinaService.crearRutina(request));
     }
 
     @PutMapping("/admin/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody RutinaRequestDTO request) {
        try { 
             rutinaService.actualizarRutina(id, request); 
@@ -143,7 +143,7 @@ public class RutinaController {
     }
 
     @DeleteMapping("/admin/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         rutinaService.eliminarRutina(id);
         return ResponseEntity.noContent().build();
@@ -165,19 +165,19 @@ public class RutinaController {
     }
 
     @PatchMapping("/admin/{id}/activar")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<Rutina> activar(@PathVariable Long id) {
         return ResponseEntity.ok(rutinaService.activarRutina(id));
     }
 
     @PatchMapping("/admin/{id}/desactivar")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<Rutina> desactivar(@PathVariable Long id) {
         return ResponseEntity.ok(rutinaService.desactivarRutina(id));
     }
 
     @PostMapping("/admin/{id}/enviar-aviso")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<?> enviarAviso(@PathVariable Long id, @RequestBody EnviarAvisoRequest request) {
         try {
                 Rutina rutina = rutinaService.buscarRutina(id);

@@ -10,13 +10,13 @@ function ValidarToken() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { setUser } = useAuth();
+  const { setUser, setToken} = useAuth();
   const { typedState } = useLocationState();
 
   const from = typedState?.from || ROUTES.HOME;
   const email = location.state?.email || "";
 
-  const [token, setToken] = useState("");
+  const [token, setTokenInput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -38,8 +38,8 @@ function ValidarToken() {
 
         return;
       }
-
-      setUser(res.data);
+      setToken(res.data.token);
+      setUser(res.data.user);
 
       navigate(from, {
         state: {
@@ -76,7 +76,7 @@ function ValidarToken() {
             type="text"
             className="form-control"
             value={token}
-            onChange={e => setToken(e.target.value)}
+            onChange={e => setTokenInput(e.target.value)}
             required
           />
         </div>

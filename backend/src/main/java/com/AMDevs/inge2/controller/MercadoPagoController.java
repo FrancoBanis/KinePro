@@ -51,7 +51,7 @@ public class MercadoPagoController {
     }
 
     @GetMapping("/historial-clinica")
-    @PreAuthorize("hasAnyRole('ADMIN','SECRETARIA')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SECRETARIA')")
     public ResponseEntity<PagoClinicaPaginaDTO> obtenerHistorialClinica(
             @RequestParam(defaultValue = "0") int pagina
     ) {
