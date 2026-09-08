@@ -42,8 +42,8 @@ public class AuthController {
     @Autowired
     private TurnoRepository turnoRepository;
 
-    //@Autowired
-    //private JavaMailSender mailSender;
+    @Autowired
+    private JavaMailSender mailSender;
     
     @Autowired 
     private JwtService jwtService;
@@ -308,7 +308,7 @@ public class AuthController {
         message.setText(
                 "Tu token es: " + token + " (expira en 30 segundos)"
         );
-        //mailSender.send(message);
+        mailSender.send(message);
     }
     private record UserUpdateRequest(
             String nombre,
