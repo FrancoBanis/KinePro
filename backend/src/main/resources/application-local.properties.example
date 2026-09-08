@@ -1,0 +1,28 @@
+# ============================================================
+# Copiar este archivo como application-local.properties
+# y completar con los valores reales de tu entorno.
+# NUNCA subir application-local.properties al repositorio.
+# ============================================================
+
+# Mail (Gmail)
+# Para obtener el App Password:
+# Google Account → Seguridad → Verificación en 2 pasos → Contraseñas de aplicación
+spring.mail.username=tu-email@gmail.com
+spring.mail.password=xxxx xxxx xxxx xxxx
+
+# JWT
+# Cualquier string de al menos 32 caracteres
+jwt.secret=una-clave-muy-larga-y-segura-de-al-menos-32-caracteres-aqui
+
+# URLs
+# Desarrollo local sin tunnels:
+app.frontend-url=http://localhost:5173
+app.backend-url=http://localhost:8080
+# Con VS Code Dev Tunnels (actualizar cada sesión):
+# app.frontend-url=https://xxxxxxxx-5173.brs.devtunnels.ms/
+# app.backend-url=https://xxxxxxxx-8080.brs.devtunnels.ms/
+
+# MercadoPago
+# Obtener en https://www.mercadopago.com.ar/developers/panel
+mercadopago.access-token=APP_USR-...
+mercado.public.key=APP_USR-...
