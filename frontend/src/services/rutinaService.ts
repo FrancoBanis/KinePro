@@ -50,7 +50,7 @@ export async function handleDesactivarRutina(rutinaId: number,  onSuccess?: () =
 }
 
 export async function handleEnviarAviso(idRutina: number , mensaje: String): Promise<void> {
-  await api.post(ENDPOINTS_RUTINA.ENVIAR_AVISO(idRutina),mensaje);
+  await api.post(ENDPOINTS_RUTINA.ENVIAR_AVISO(idRutina),{mensaje});
 }
 export async function handleCalcularCosto (idRutina: number, idUsuario: number) : Promise<number> {
         const response = await api.get(ENDPOINTS_RUTINA.CALCULAR_COSTO, {params: {id: idRutina , idUsuario: idUsuario}});
