@@ -174,7 +174,7 @@ VITE_BACKEND_URL=https://xxxxxxxx-8080.brs.devtunnels.ms
 ---
 
 ## Estructura del proyecto
-
+```
 kinepro/
 ├── backend/
 │ └── src/main/
@@ -196,8 +196,7 @@ kinepro/
 ├── context/ # AuthContext
 ├── pages/ # LoginPage, RutinasPage, MisTurnosPage...
 └── services/ # axiosInstance, rutinaService, turnoService...
-
-
+```
 ---
 
 ## Variables de configuración
